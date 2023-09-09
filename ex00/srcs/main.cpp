@@ -36,8 +36,11 @@ int main(int argc, char** argv)
 	}
 	std::string	line;															// 
 	std::getline(fileDateValues, line);
+	BitcoinExchange test("data.csv");
 	while(std::getline(fileDateValues, line))
 	{
-		std::cout << line << std::endl;
+		(void)line;
+		//std::cout << line << std::endl;
+
 	}
 }
