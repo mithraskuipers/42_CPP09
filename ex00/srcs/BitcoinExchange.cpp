@@ -23,7 +23,25 @@ BitcoinExchange::BitcoinExchange(const std::string& fileHistorialData)
 	    if (std::getline(ss, date, ',') && (ss >> price))
 	        _historicalData[date] = price;
 	}
+}
 
+
+void BitcoinExchange::printExchangeDetails(const std::string& date, float value) const
+{
+    try
+    {
+        float exchangeRate = getExchangeRate(date, value);
+        float result = value * exchangeRate;
+
+        std::cout << "Date: " << date << std::endl;
+        std::cout << "Bitcoin Value: " << value << std::endl;
+        std::cout << "Exchange Rate: " << exchangeRate << std::endl;
+        std::cout << "Result: " << result << std::endl;
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
 }
 
 
@@ -130,9 +148,6 @@ int BitcoinExchange::isDateValid(const std::string& date) const
 }
 
 
-#include <cmath>
-#include <cfloat>
-
 
 class NegativeValueException : public std::runtime_error
 {
@@ -152,44 +167,59 @@ public:
     InexistentDateException() : std::runtime_error("Date does not exist.") {}
 };
 
-
-
-#include <limits> // Include for std::numeric_limits
-#include <stdexcept> // Include for std::runtime_error
-
 float BitcoinExchange::getExchangeRate(const std::string& date, float value) const
 {
-    // Check if the value is too large to represent as a float
-    if (value < -FLT_MAX || value > FLT_MAX)
+    // Check if the value is too large or too small for both float and int
+    if (value < -FLT_MAX || value > FLT_MAX || value > std::numeric_limits<int>::max() || value < std::numeric_limits<int>::min())
     {
-        throw std::runtime_error("Too large a number.");
+        throw std::runtime_error("Error: too large a number.");
     }
 
-    // Check if the value is negative
+    if (value > 1000)
+    {
+        throw std::runtime_error("Error: too large a number.");
+    }
+
     if (value < 0)
     {
-        throw std::runtime_error("Not a positive number.");
+        throw std::runtime_error("Error: not a positive number.");
     }
 
     // Check if the date is valid
     if (!isDateValid(date))
     {
-        throw std::runtime_error("Inexistent date.");
+        throw std::runtime_error("Error: bad input.");
     }
 
     // Check if the date exists in the historical data map
     std::map<std::string, float>::const_iterator it = _historicalData.find(date);
     if (it != _historicalData.end())
     {
-
         // If the date exists in the map, multiply the value by the exchange rate
         float exchangeRate = it->second;
         return exchangeRate; // Corrected order of multiplication
     }
     else
     {
-        // Date not found in historical data
-        throw std::runtime_error("Inexistent date.");
+        // Date not found in historical data, find the closest lower date
+        std::map<std::string, float>::const_iterator lower = _historicalData.begin();
+        for (std::map<std::string, float>::const_iterator iter = _historicalData.begin(); iter != _historicalData.end(); ++iter)
+        {
+            if (iter->first < date && iter->first > lower->first)
+            {
+                lower = iter;
+            }
+        }
+
+        if (lower != _historicalData.end())
+        {
+            // Use the closest lower date
+            float exchangeRate = lower->second;
+            return exchangeRate;
+        }
+        else
+        {
+            throw std::runtime_error("Error: nonexistent date.");
+        }
     }
 }
-

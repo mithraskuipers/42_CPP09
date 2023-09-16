@@ -6,12 +6,12 @@
 #    By: mikuiper <mikuiper@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2023/08/13 09:46:29 by mikuiper      #+#    #+#                  #
-#    Updated: 2023/09/09 16:18:47 by mikuiper      ########   odam.nl          #
+#    Updated: 2023/09/16 15:58:06 by mikuiper      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
 # Executable name
-NAME = cpp09_00
+NAME = btc
 
 # Compiler and flags
 CC = c++
