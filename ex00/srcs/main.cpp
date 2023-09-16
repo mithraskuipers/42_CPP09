@@ -1,11 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.cpp                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
+/*   Updated: 2023/09/16 17:07:36 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "BitcoinExchange.hpp"
-#include <iostream> // cout
-#include <fstream>  // ifstream
-#include <sstream>  // stringstream
-#include <iostream>
-#include <vector>
-#include <stdexcept>
-#include <limits> // Include for std::numeric_limits
 
 int checkExtension(const std::string& s, const std::string& suffix)
 {

@@ -6,16 +6,13 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/09 22:25:03 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 16:26:41 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/16 17:08:15 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 # ifndef BITCOIN_EXCHANGE_HPP
 #define BITCOIN_EXCHANGE_HPP
 
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <map>
 #include <vector>
 #include <string>
@@ -25,8 +22,9 @@
 #include <limits> // Include for std::numeric_limits
 #include <stdexcept> // Include for std::runtime_error
 #include <algorithm> // Include for std::max_element
-#include <algorithm> // Include for std::max_element
-
+#include <iostream> // cout
+#include <fstream>  // ifstream
+#include <sstream>  // stringstream
 
 class BitcoinExchange
 {
@@ -44,6 +42,5 @@ class BitcoinExchange
 };
 
 std::ostream& operator<<(std::ostream& o, const BitcoinExchange& i);
-
 
 # endif
