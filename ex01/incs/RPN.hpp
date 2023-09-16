@@ -1,19 +1,37 @@
-// RPN.hpp
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   RPN.hpp                                            :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/15 15:59:51 by mikuiper      #+#    #+#                 */
+/*   Updated: 2023/09/16 14:38:32 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RPN_HPP
 #define RPN_HPP
 
 #include <stack>
 #include <string>
+#include <iostream>
+#include <sstream>
+#include <stdexcept>
 
-class RPNCalculator {
-public:
-    RPNCalculator();
-    int evaluate(const std::string& expression);
-
-private:
-    std::stack<int> operandStack;
-    bool isOperator(const std::string& token);
-    int performOperation(const std::string& op);
+class RPNCalculator
+{
+	public:
+		RPNCalculator();
+		RPNCalculator(const std::string& expression);
+		~RPNCalculator();
+		RPNCalculator(const RPNCalculator& other);
+		RPNCalculator& operator=(const RPNCalculator& other);
+		int evaluate(const std::string& expression);
+	private:
+		std::stack<int> operandStack;
+		int isOperand(const std::string& token);
+		int performOperation(const std::string& operatorToken);
 };
 
-#endif // RPN_HPP
+#endif
