@@ -1,8 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   PmergeMe.cpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/16 17:09:35 by mikuiper      #+#    #+#                 */
+/*   Updated: 2023/09/16 19:13:28 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PmergeMe.hpp"
-#include <algorithm>
 
 template <typename Container>
-void merge(Container& arr, typename Container::iterator left, typename Container::iterator middle, typename Container::iterator right) {
+void merge(Container& /*arr*/, typename Container::iterator left, typename Container::iterator middle, typename Container::iterator right) {
     Container L(left, middle);
     Container R(middle, right);
 
@@ -35,8 +46,10 @@ void merge(Container& arr, typename Container::iterator left, typename Container
 }
 
 template <typename Container>
-void mergeSort(Container& container, typename Container::iterator left, typename Container::iterator right) {
-    if (std::distance(left, right) > 1) {
+void mergeSort(Container& container, typename Container::iterator left, typename Container::iterator right)
+{
+    if (std::distance(left, right) > 1)
+	{
         typename Container::iterator middle = left;
         std::advance(middle, std::distance(left, right) / 2);
 
@@ -48,8 +61,10 @@ void mergeSort(Container& container, typename Container::iterator left, typename
 }
 
 template <typename Container>
-void fordJohnsonSort(Container& container) {
-    if (container.empty()) {
+void fordJohnsonSort(Container& container)
+{
+    if (container.empty())
+	{
         return; // Nothing to sort
     }
 
@@ -76,7 +91,8 @@ void fordJohnsonSort(Container& container) {
 
     container.clear();
 
-    for (int i = 0; i <= max; i++) {
+    for (int i = 0; i <= max; i++)
+	{
         for (int j = 0; j < aux[i]; j++) {
             container.push_back(i);
         }
@@ -92,7 +108,8 @@ void fordJohnsonSort(Container& container) {
 }
 
 template <typename Container>
-void printContainer(const Container& container) {
+void printContainer(const Container& container)
+{
     for (typename Container::const_iterator it = container.begin(); it != container.end(); ++it) {
         std::cout << " " << *it;
     }

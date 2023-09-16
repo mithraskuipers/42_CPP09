@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   main.cpp                                           :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
+/*   Updated: 2023/09/16 19:17:38 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <iostream>
 #include <vector>
 #include <list>
@@ -6,7 +18,6 @@
 #include <iomanip>
 #include "PmergeMe.hpp"
 #include <algorithm>
-
 
 int main(int argc, char* argv[]) {
     // Parse command-line arguments and store them in a vector and a list.
@@ -64,3 +75,8 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
+/*
+make re && ./PmergeMe 3 5 9 7 4 ;
+make re && ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "` ;
+*/
