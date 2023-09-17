@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:35 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 19:13:28 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/16 19:28:57 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,3 @@ void printContainer(const Container& container)
 template void mergeSort(std::vector<int>& container, typename std::vector<int>::iterator left, typename std::vector<int>::iterator right);
 template void fordJohnsonSort(std::vector<int>& container);
 template void printContainer(const std::vector<int>& container);
-template void mergeSort(std::list<int>& container, typename std::list<int>::iterator left, typename std::list<int>::iterator right);
-template void fordJohnsonSort(std::list<int>& container);
-template void printContainer(const std::list<int>& container);
