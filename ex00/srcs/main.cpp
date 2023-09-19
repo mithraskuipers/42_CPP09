@@ -6,12 +6,13 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 17:07:36 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/19 12:49:08 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
 
+// Check if file extension equals specified suffix
 int checkExtension(const std::string& s, const std::string& suffix)
 {
     if (s.length() >= suffix.length())
@@ -27,37 +28,37 @@ int checkExtension(const std::string& s, const std::string& suffix)
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if ((argc != 2) || (checkExtension(argv[1], ".txt")))
     {
         std::cerr << "Error: could not open file." << std::endl;
-        // std::cerr << "Usage: " << argv[0] << " input.txt" << std::endl;
         return 1;
     }
 
-    std::ifstream inputFile(argv[1]);
+    std::ifstream inputFile(argv[1]);											// input.txt
     if (!inputFile.is_open())
     {
         std::cerr << "Error: could not open file." << std::endl;
         return 1;
     }
 
-    BitcoinExchange exchange("data.csv");
-    std::string line;
+    BitcoinExchange	exchange("data.csv");										// btc exchange rates
+    std::string		line;
 
-    std::getline(inputFile, line); // to skip the header row of input.txt
+    std::getline(inputFile, line);												// Trick to skip the header row of input.txt
+
     // Process each line in the input file
     while (std::getline(inputFile, line))
     {
-        // Split the line at the '|' character
-        std::istringstream ss(line);
+        std::istringstream ss(line);											// string stream to split it up in tokens
         std::string date;
         float value;
 
-        if (std::getline(ss, date, '|') && (ss >> value))
+        if (std::getline(ss, date, '|') && (ss >> value))						// Split line into tokens on basis of '|'. Extract date and value
         {
-            // Trim leading and trailing whitespace from date
-            size_t first = date.find_first_not_of(" \t\n\r\f\v");
-            size_t last = date.find_last_not_of(" \t\n\r\f\v");
+            size_t first = date.find_first_not_of(" \t\n\r\f\v");				// Isolate actual date info by trimming leading whitespace
+
+            size_t last = date.find_last_not_of(" \t\n\r\f\v");					// Isolate actual date info by trimming trailing whitespace
+
             if (first != std::string::npos && last != std::string::npos)
             {
                 date = date.substr(first, last - first + 1);
