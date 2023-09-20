@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/19 12:49:08 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/20 14:04:41 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    BitcoinExchange	exchange("data.csv");										// btc exchange rates
+    BitcoinExchange	exchange("data.csv");										// btc exchange rates.
     std::string		line;
 
     std::getline(inputFile, line);												// Trick to skip the header row of input.txt
@@ -49,20 +49,17 @@ int main(int argc, char** argv)
     // Process each line in the input file
     while (std::getline(inputFile, line))
     {
-        std::istringstream ss(line);											// string stream to split it up in tokens
+        std::istringstream ss(line);											// string stream to split it up in tokens.
         std::string date;
         float value;
 
-        if (std::getline(ss, date, '|') && (ss >> value))						// Split line into tokens on basis of '|'. Extract date and value
+        if (std::getline(ss, date, '|') && (ss >> value))						// Split line into tokens on basis of '|'. Extract first token (i.e. date info) in date. Take first float token and put in value.qqw
         {
-            size_t first = date.find_first_not_of(" \t\n\r\f\v");				// Isolate actual date info by trimming leading whitespace
+            size_t first = date.find_first_not_of(" \t\n\r\f\v");				// Find index of first non-ws character.
 
-            size_t last = date.find_last_not_of(" \t\n\r\f\v");					// Isolate actual date info by trimming trailing whitespace
+            size_t last = date.find_last_not_of(" \t\n\r\f\v");					// Find index of last non-ws character.
 
-            if (first != std::string::npos && last != std::string::npos)
-            {
-                date = date.substr(first, last - first + 1);
-            }
+        	date = date.substr(first, last - first + 1);
 
             try
             {
