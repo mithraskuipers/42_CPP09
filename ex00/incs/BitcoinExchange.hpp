@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/09 22:25:03 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 17:08:15 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/26 19:24:00 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,12 @@ class BitcoinExchange
 	public:
 		BitcoinExchange(void);
 		~BitcoinExchange(void);
-		BitcoinExchange(const std::string& fileHistorialData);
+		BitcoinExchange(const std::string& fileBitcoinExchangeRates);
 		BitcoinExchange(const BitcoinExchange& other);
 		BitcoinExchange& operator=(const BitcoinExchange& other);
 		int isDateValid(const std::string& date) const;
 		float getExchangeRate(const std::string& date, float value) const;
-		void printExchangeDetails(const std::string& date, float value) const; // EXTRA
+		void printAllDetails(const std::string& date, float value) const; // EXTRA
 	private:
 		std::map<std::string, float>	_historicalData;
 };
