@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:13 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/26 19:24:06 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 12:43:27 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ BitcoinExchange::BitcoinExchange(const std::string& fileBitcoinExchangeRates)
 
 		if (std::getline(ss_line, ss_date, ',') && (ss_line >> ss_price))		// Split line into tokens on basis of ','. Take first float token and put in ss_price.
 		{
-			this->_historicalData[ss_date] = ss_price;							// Mapping between strings and floating point values
+			this->_exchangeRateData[ss_date] = ss_price;						// Mapping between strings and floating point values
 		}
 	}
 }
@@ -75,7 +75,7 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange& other)
 {
 	if (this != &other)
 	{
-		this->_historicalData = other._historicalData;
+		this->_exchangeRateData = other._exchangeRateData;
 	}
 	return (*this);
 }
@@ -182,66 +182,34 @@ float BitcoinExchange::getExchangeRate(const std::string& date, float value) con
 		throw std::runtime_error("Error: bad input.");
 	}
 
-	std::map<std::string, float>::const_iterator it = _historicalData.find(date);	// Check if the date exists in the historical data map
+	std::map<std::string, float>::const_iterator it = _exchangeRateData.find(date);	// Check if the date exists in the historical data map and get the date and exchange rate.
 
-	if (it != _historicalData.end())
+	if (it != _exchangeRateData.end())											// If iterator exists (not equal to end of map)..
 	{
-		float exchangeRate = it->second;										// If the date exists in the map, multiply the value by the exchange rate
+		float exchangeRate = it->second;										// Take the historical data (second ; value from key-value pairs) from the iterator
 
 		return (exchangeRate);													// Corrected order of multiplication
 	}
-	else
+
+	// Find the closest lower date in the historical data map
+	std::map<std::string, float>::const_iterator lower = _exchangeRateData.begin();
+	std::map<std::string, float>::const_iterator iter;
+	
+	for (iter = _exchangeRateData.begin(); iter != _exchangeRateData.end(); ++iter)
 	{
-		std::map<std::string, float>::const_iterator lower = _historicalData.begin();	// Date not found in historical data, find the closest lower date
-
-		for (std::map<std::string, float>::const_iterator iter = _historicalData.begin(); iter != _historicalData.end(); ++iter)
+		if ((iter->first < date) && (iter->first > lower->first))				// Date is lower than input date, but higher than previously found lower date
 		{
-			if (iter->first < date && iter->first > lower->first)
-			{
-				lower = iter;
-			}
-		}
-
-		if (lower != _historicalData.end())
-		{
-			float exchangeRate = lower->second;									// Use the closest lower date
-
-			return (exchangeRate);
-		}
-		else
-		{
-			throw std::runtime_error("Error: nonexistent date.");
+			lower = iter;														// Update the closest lower date
 		}
 	}
+
+	if (lower != _exchangeRateData.end())										// If a lower date is found, return its exchange rate
+	{
+		float exchangeRate = lower->second;
+		return (exchangeRate);
+	}
+	else																		// If no lower date is found, throw an error
+	{
+		throw std::runtime_error("Error: nonexistent date.");
+	}
 }
-
-/*
-Exceptions
-*/
-
-class NegativeValueException : public std::runtime_error
-{
-	public:
-		NegativeValueException() : std::runtime_error("Value is negative.")
-		{
-			
-		}
-};
-
-class TooLargeNumberException : public std::runtime_error
-{
-	public:
-		TooLargeNumberException() : std::runtime_error("Value is too large.")
-		{
-			
-		}
-};
-
-class InexistentDateException : public std::runtime_error
-{
-	public:
-		InexistentDateException() : std::runtime_error("Date does not exist.")
-		{
-			
-		}
-};

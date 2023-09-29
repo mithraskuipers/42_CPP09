@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/09 22:25:03 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/26 19:24:00 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 12:06:00 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ class BitcoinExchange
 		float getExchangeRate(const std::string& date, float value) const;
 		void printAllDetails(const std::string& date, float value) const; // EXTRA
 	private:
-		std::map<std::string, float>	_historicalData;
+		std::map<std::string, float>	_exchangeRateData;
 };
 
 std::ostream& operator<<(std::ostream& o, const BitcoinExchange& i);

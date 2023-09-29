@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/26 19:24:11 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 13:25:58 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,11 @@ int main(int argc, char** argv)
 
 			size_t last = ss_date.find_last_not_of(" \t\n\r\f\v");				// Find index of last non-ws character.
 
-			ss_date = ss_date.substr(first, (last - first) + 1);					// Extract only date itself. +1 to account for last character.
+			ss_date = ss_date.substr(first, (last - first) + 1);				// Extract only date itself. +1 to account for last character.
 
 			try
 			{
-				float exchangeRate = exchange.getExchangeRate(ss_date, ss_value);	// Get exchange rate for a given date and ss_value. Value error chcking.
+				float exchangeRate = exchange.getExchangeRate(ss_date, ss_value);	// Get exchange rate for a given date and ss_value. Value error checking.
 				float result = ss_value * exchangeRate;
 				std::cout << ss_date << " => " << ss_value << " = " << result << std::endl;
 
