@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 15:59:51 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 14:38:32 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 14:07:37 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class RPNCalculator
 		~RPNCalculator();
 		RPNCalculator(const RPNCalculator& other);
 		RPNCalculator& operator=(const RPNCalculator& other);
-		int evaluate(const std::string& expression);
+		int parseExpression(const std::string& expression);
 	private:
 		std::stack<int> operandStack;
 		int isOperand(const std::string& token);

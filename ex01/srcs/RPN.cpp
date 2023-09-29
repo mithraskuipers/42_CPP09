@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:02 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 15:04:17 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 14:07:37 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,21 @@ RPNCalculator::RPNCalculator()
 // Parameterized Constructor
 RPNCalculator::RPNCalculator(const std::string& expression)
 {
-	// Initialize the calculator with the provided expression
-	try
+	try																			// Initialize the calculator with the provided expression
 	{
-		int result = evaluate(expression);
+		int result = parseExpression(expression);
 		this->operandStack.push(result);
 	}
 	catch (const std::exception& error)
 	{
-		// Handle any exceptions if evaluation fails
-		std::cerr << error.what() << std::endl;
+		std::cerr << error.what() << std::endl;									// Handle any exceptions if evaluation fails
 	}
 }
 
 // Destructor
 RPNCalculator::~RPNCalculator()
 {
-	// Clear the operand stack
-	while (!this->operandStack.empty())
+	while (!this->operandStack.empty())											// Clear the operand stack
 	{
 		this->operandStack.pop();
 	}
@@ -51,22 +48,20 @@ Standard containers, like std::stack, already provide deep copying behavior thro
 // Copy Constructor (deep copy using assignment operator)
 RPNCalculator::RPNCalculator(const RPNCalculator& other)
 {
-	this->operandStack = other.operandStack; // Deep copy using assignment operator
+	this->operandStack = other.operandStack;									// Deep copy using assignment operator
 }
 
 RPNCalculator& RPNCalculator::operator=(const RPNCalculator& other)
 {
 	if (this == &other)
 	{
-		return (*this); // Avoid self-assignment
+		return (*this);															// Avoid self-assignment
 	}
 
-	// Use the assignment operator of std::stack to deep copy the operandStack
-	this->operandStack = other.operandStack;
+	this->operandStack = other.operandStack;									// Use the assignment operator of std::stack to deep copy the operandStack
 
 	return (*this);
 }
-
 
 // Check if token is operator
 int RPNCalculator::isOperand(const std::string& token)
@@ -109,7 +104,7 @@ int RPNCalculator::performOperation(const std::string& operatorToken)
 	throw (std::invalid_argument("Error: Invalid operator"));					// Throw an exception for an invalid operatorToken
 }
 
-int RPNCalculator::evaluate(const std::string& expression)
+int RPNCalculator::parseExpression(const std::string& expression)
 {
 	std::istringstream	iss(expression);
 	std::string			token;

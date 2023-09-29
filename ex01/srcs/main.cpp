@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/09/16 15:04:47 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/09/29 14:07:37 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	try
 	{
 		RPNCalculator	calculator;
-		outcome = calculator.evaluate(argv[1]);
+		outcome = calculator.parseExpression(argv[1]);
 		std::cout << outcome << std::endl;
 	}
 	catch (const std::exception& error)
