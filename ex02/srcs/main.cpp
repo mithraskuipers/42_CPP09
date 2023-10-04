@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/02 11:39:54 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/04 12:33:11 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 int main(int argc, char* argv[])
 {
-	// Parse command-line arguments and store them in a vector and a list.
-	std::vector<int> vectorInput;
-	std::list<int> listInput;
+	// Parse input store in vector and list.
+	std::vector<int>	vectorInput;
+	std::list<int>		listInput;
 
 	for (int i = 1; i < argc; ++i)
 	{
 		int num = std::atoi(argv[i]);
-		if (num != 0 || (num == 0 && argv[i][0] == '0'))
+		if ((num != 0) || (num == 0 && argv[i][0] == '0'))
 		{
 			vectorInput.push_back(num);
 			listInput.push_back(num);

@@ -6,14 +6,15 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:35 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/02 11:35:44 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/04 12:50:28 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
 template <typename Container>
-void merge(Container& /*arr*/, typename Container::iterator left, typename Container::iterator middle, typename Container::iterator right) {
+void merge(Container& /*arr*/, typename Container::iterator left, typename Container::iterator middle, typename Container::iterator right)
+{
 	Container L(left, middle);
 	Container R(middle, right);
 
@@ -51,20 +52,26 @@ void merge(Container& /*arr*/, typename Container::iterator left, typename Conta
 	}
 }
 
+#include "PmergeMe.hpp"
+
 template <typename Container>
 void mergeSort(Container& container, typename Container::iterator left, typename Container::iterator right)
 {
-	if (std::distance(left, right) > 1)
-	{
-		typename Container::iterator middle = left;
-		std::advance(middle, std::distance(left, right) / 2);
+    if (std::distance(left, right) > 1)
+    {
+        typename Container::iterator middle = left;
+        std::advance(middle, std::distance(left, right) / 2);
 
-		mergeSort(container, left, middle);
-		mergeSort(container, middle, right);
+        mergeSort(container, left, middle);
+        mergeSort(container, middle, right);
 
-		merge(container, left, middle, right);
-	}
+        merge(container, left, middle, right);
+    }
 }
+
+// Explicit instantiation for std::list<int>
+template void mergeSort(std::list<int>& container, std::list<int>::iterator left, std::list<int>::iterator right);
+
 
 template <typename Container>
 void fordJohnsonSort(Container& container)
@@ -130,6 +137,9 @@ void printContainer(const Container& container)
 }
 
 // Explicit template instantiations for int vectors and lists
-template void mergeSort(std::vector<int>& container, typename std::vector<int>::iterator left, typename std::vector<int>::iterator right);
+template void mergeSort(std::vector<int>& container, std::vector<int>::iterator left, std::vector<int>::iterator right);
 template void fordJohnsonSort(std::vector<int>& container);
 template void printContainer(const std::vector<int>& container);
+template void mergeSort(std::list<int>& container);
+template void fordJohnsonSort(std::list<int>& container);
+template void printContainer(const std::list<int>& container);
