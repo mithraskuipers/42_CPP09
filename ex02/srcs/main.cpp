@@ -6,18 +6,18 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/05 21:39:48 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/05 22:46:14 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
 
-bool isPositiveNumber(const std::string &s)
+int isPositiveNumber(const std::string &s)
 {
-    if (s.empty() || (s[0] == '0' && s.length() > 1))
+    if (s.empty())
 	{
-        return false; // Numbers starting with 0 are not positive
+        return (0); // Numbers starting with 0 are not positive
     }
     for (std::size_t i = 0; i < s.length(); ++i)
 	{
@@ -26,7 +26,7 @@ bool isPositiveNumber(const std::string &s)
             return false; // Non-digit characters found
         }
     }
-    return (true);
+    return (1);
 }
 
 int main(int argc, char *argv[])
