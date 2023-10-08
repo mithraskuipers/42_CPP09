@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:35 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/08 16:05:06 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/08 21:31:49 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void PmergeMe::fordJohnsonSortWrapper()
 }
 
 template<typename T>
-void PmergeMe::fordJohnsonSort(T & lst, int beg, int end)
+void PmergeMe::fordJohnsonSort(T &lst, int beg, int end)						// Uses iterators, no assumptions about container type
 {
 	// Base case: if the sublist has one or zero elements, it is already sorted
 	if (beg < end)
