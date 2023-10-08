@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:35 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/08 21:31:49 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/08 22:19:06 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,31 +93,33 @@ void PmergeMe::fordJohnsonSortWrapper()
 
 template<typename T>
 void PmergeMe::fordJohnsonSort(T &lst, int beg, int end)						// Uses iterators, no assumptions about container type
-{
+{																				// Uses iterators (lst.begin(), lst.end()) to traverse the container. Both std::vector and std::deque support iterators.
 	// Base case: if the sublist has one or zero elements, it is already sorted
 	if (beg < end)
 	{
-		// Find the middle index of the sublist
-		int mid = beg + (end - beg) / 2;
+		int mid = beg + (end - beg) / 2;										// Find middle index of the list
 		
 		// Recursively sort the left half of the sublist
 		fordJohnsonSort(lst, beg, mid);
 		
 		// Recursively sort the right half of the sublist
 		fordJohnsonSort(lst, mid + 1, end);
-
-		// Merge the sorted halves
 		
 		// Temporary vector to store the merged elements
 		std::vector<int> temp(end - beg + 1);
-		int i = beg, j = mid + 1, k = 0;
+		int i = beg;
+		int j = mid + 1;
+		int k = 0;
 
 		// Compare elements from the left and right halves and merge them into temp vector
 		while (i <= mid && j <= end)
 		{
-			if (lst[i] <= lst[j]) {
+			if (lst[i] <= lst[j])
+			{
 				temp[k++] = lst[i++];
-			} else {
+			}
+			else
+			{
 				temp[k++] = lst[j++];
 			}
 		}
