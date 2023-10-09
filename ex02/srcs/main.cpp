@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/08 16:03:58 by mikuiper      ########   odam.nl         */
+/*   Updated: 2023/10/09 12:00:14 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ int isPositiveNumber(const std::string &s)
 	{
 		return (0);
 	}
-	for (std::size_t i = 0; i < s.length(); i++)
+	for (std::size_t left_idx = 0; left_idx < s.length(); left_idx++)
 	{
-		if (!std::isdigit(s[i]))
+		if (!std::isdigit(s[left_idx]))
 		{
 			return (0);
 		}
@@ -30,9 +30,9 @@ int isPositiveNumber(const std::string &s)
 
 int isInputValid(char **argv)
 {
-	for (int i = 1; argv[i]; i++)
+	for (int left_idx = 1; argv[left_idx]; left_idx++)
 	{
-		if (!isPositiveNumber(argv[i]))
+		if (!isPositiveNumber(argv[left_idx]))
 		{
 			return (0);
 		}
@@ -64,8 +64,7 @@ int main(int argc, char **argv)
 	return (0);
 }
 
-
 /*
 make re && ./PmergeMe 3 5 9 7 4 ;
-make re && ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "` ;
+make re && ./PmergeMe `shuf -left_idx 1-100000 -n 3000 | tr "\n" " "` ;
 */
