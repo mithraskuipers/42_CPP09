@@ -95,7 +95,7 @@ void PmergeMe::fordJohnsonSortWrapper()
 	std::cout << "After: ";
 	this->intDequePrinter();
 	duration = ((stop - start) / (double)CLOCKS_PER_SEC) * 1000000;				// Calculate the duration in microseconds
-	std::cout << "Time to process a range of " << this->intDeque.size() << " elements with std::deque : " << duration << " microseconds" << std::endl;
+	std::cout << "Time to process a range of " << this->intDeque.size() << " elements with std::deque : " << duration << " us" << std::endl;
 }
 
 /*
@@ -114,36 +114,36 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
 {
 	int left_idx = lst_start_idx;												// Index of the current left sublist of interest. Changes with each iteration.
 	int right_index = mid + 1;													// Start of the current right sublist interest. Changes with each iteration.
-	int merged_index = 0;														// Index for merging the sublists.
+	int temp_index = 0;														// Index for merging the sublists.
 	std::vector<int> temp(lst_end_idx - lst_start_idx + 1);						// Vector to store merged elements.
 
 	while ((left_idx <= mid) && (right_index <= lst_end_idx))					// Merge elements from left and right sublists into the temporary vector
 	{
 		if (lst[left_idx] <= lst[right_index])									// Compare elements from left and right sublists, and merge them in ascending order
 		{
-			temp[merged_index] = lst[left_idx];									// Merge element from the left sublist
-			merged_index++;
+			temp[temp_index] = lst[left_idx];									// Merge element from the left sublist
+			temp_index++;
 			left_idx++;
 		}
 		else
 		{
-			temp[merged_index] = lst[right_index];								// Merge element from the right sublist
-			merged_index++;
+			temp[temp_index] = lst[right_index];								// Merge element from the right sublist
+			temp_index++;
 			right_index++;
 		}
 	}
 
 	while (left_idx <= mid)														// Copy any remaining elements from the left sublist to the temporary vector
 	{
-		temp[merged_index++] = lst[left_idx++];
+		temp[temp_index++] = lst[left_idx++];
 	}
 
 	while (right_index <= lst_end_idx)											// Copy any remaining elements from the right sublist to the temporary vector
 	{
-		temp[merged_index++] = lst[right_index++];
+		temp[temp_index++] = lst[right_index++];
 	}
 
-	for (int p = 0; p < merged_index; p++)										// Copy the merged elements back to the original list starting from lst_start_idx
+	for (int p = 0; p < temp_index; p++)										// Copy the merged elements back to the original list starting from lst_start_idx
 	{
 		lst[lst_start_idx + p] = temp[p];
 	}

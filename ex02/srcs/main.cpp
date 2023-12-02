@@ -12,6 +12,10 @@
 
 #include "PmergeMe.hpp"
 
+/*
+./PmergeMe $(shuf -i 1-100000 -n 3000) ;
+*/
+
 int isPositiveNumber(const std::string &s)
 {
 	if (s.empty())
@@ -59,12 +63,6 @@ int main(int argc, char **argv)
 	mergeMe.readInput(argv);
 	mergeMe.fordJohnsonSortWrapper();
 
-	// TODO: ADD TIMINGS!
-
 	return (0);
 }
 
-/*
-make re && ./PmergeMe 3 5 9 7 4 ;
-make re && ./PmergeMe `shuf -left_idx 1-100000 -n 3000 | tr "\n" " "` ;
-*/
