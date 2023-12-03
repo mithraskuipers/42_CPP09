@@ -152,15 +152,21 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
 template<typename T>
 void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
 {
-	if (lst_start_idx < lst_end_idx)											// If the sublist has more than one item, continue dividing it
+	int lst_mid_idx;
+
+	if (lst_start_idx != lst_end_idx)											// If the sublist has more than one item, continue dividing it
 	{
-		int mid = lst_start_idx + ((lst_end_idx - lst_start_idx) / 2);			// Find the middle index of the sublist
+		// Further splitting in left sublist and right sublists..
 
-		fordJohnsonSort(lst, lst_start_idx, mid);								// Recursively sort the left half of the sublist
+		lst_mid_idx = lst_start_idx + ((lst_end_idx - lst_start_idx) / 2);			// Find the middle index of the sublist
 
-		fordJohnsonSort(lst, mid + 1, lst_end_idx);								// Recursively sort the right half of the sublist
+		// Left sublist
+		fordJohnsonSort(lst, lst_start_idx, lst_mid_idx);								// Recursively sort the left half of the sublist
 
-		mergeSublists(lst, lst_start_idx, mid, lst_end_idx);					// Merge the sorted halves back together
+		// Right sublist
+		fordJohnsonSort(lst, lst_mid_idx + 1, lst_end_idx);								// Recursively sort the right half of the sublist
+
+		mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);					// Merge the sorted halves back together
 	}
 }
 

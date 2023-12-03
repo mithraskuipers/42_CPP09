@@ -13,7 +13,8 @@
 #include "PmergeMe.hpp"
 
 /*
-./PmergeMe $(shuf -i 1-100000 -n 3000) ;
+make re ; ./PmergeMe $(shuf -i 10-100 -n 30) ;
+make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
 */
 
 int isPositiveNumber(const std::string &s)
