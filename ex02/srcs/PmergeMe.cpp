@@ -114,8 +114,6 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
             if (i < lst_end_idx)
                 std::cout << ", ";
         }
-
-        std::cout << ">" << std::endl;
     }
 
     while (left_idx <= mid && right_idx <= lst_end_idx)
@@ -140,6 +138,25 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
         temp[temp_index++] = lst[right_idx++];
     }
 
+    if (printOutput)
+    {
+        std::cout << ">" << std::endl;
+    }
+
+    // Print the intermediate state of the list after merging each pair of sublists
+    if (printOutput)
+    {
+        std::cout << "Intermediate state: ";
+		std::cout << "<";
+        for (int i = lst_start_idx; i <= lst_end_idx; ++i)
+        {
+            std::cout << lst[i];
+            if (i < lst_end_idx)
+                std::cout << ", ";
+        }
+		std::cout << ">";
+        std::cout << std::endl;
+    }
 
     // Copy sorted elements back to the original list
     for (int i = 0; i < temp_index; i++)
@@ -147,7 +164,19 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
         lst[lst_start_idx + i] = temp[i];
     }
 
+    if (printOutput)
+    {
+        std::cout << "Sorted sublist: <";
+        for (int i = lst_start_idx; i <= lst_end_idx; ++i)
+        {
+            std::cout << lst[i];
+            if (i < lst_end_idx)
+                std::cout << ", ";
+        }
+        std::cout << ">" << std::endl;
+    }
 }
+
 
 
 
@@ -166,17 +195,7 @@ void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
 
         mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);
 
-        if (printOutput)
-        {
-            std::cout << "Sorted sublist: <";
-            for (int i = lst_start_idx; i <= lst_end_idx; ++i)
-            {
-                std::cout << lst[i];
-                if (i < lst_end_idx)
-                    std::cout << ", ";
-            }
-            std::cout << ">" << std::endl;
-        }
+
     }
 }
 
