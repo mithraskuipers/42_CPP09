@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/09 12:00:14 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/01/03 23:34:11 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-
 	PmergeMe	mergeMe;
 	mergeMe.readInput(argv);
+	mergeMe.setPrintOutput(true);
 	mergeMe.fordJohnsonSortWrapper();
 
 	return (0);

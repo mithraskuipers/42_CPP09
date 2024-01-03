@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/10/02 12:31:43 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/10/09 12:55:40 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/01/03 21:58:37 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ class PmergeMe
 		void intVectorPrinter();
 		void intDequePrinter();
 		void readInput(char **argv);
+		void setPrintOutput(bool enablePrint);
 		template<typename T>
 		void fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx);
 		void fordJohnsonSortWrapper();
