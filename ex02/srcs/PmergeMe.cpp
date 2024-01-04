@@ -146,7 +146,7 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
     // Print the intermediate state of the list after merging each pair of sublists
     if (printOutput)
     {
-        std::cout << "Intermediate state: ";
+        std::cout << "Merged state: ";
 		std::cout << "<";
         for (int i = lst_start_idx; i <= lst_end_idx; ++i)
         {
@@ -190,14 +190,26 @@ void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
     {
         lst_mid_idx = lst_start_idx + ((lst_end_idx - lst_start_idx) / 2);
 
+        if (printOutput)
+        {
+            std::cout << "Splitting list: <";
+            for (int i = lst_start_idx; i <= lst_end_idx; ++i)
+            {
+                std::cout << lst[i];
+                if (i < lst_end_idx)
+                    std::cout << ", ";
+            }
+            std::cout << ">" << std::endl;
+        }
+
         fordJohnsonSort(lst, lst_start_idx, lst_mid_idx);
         fordJohnsonSort(lst, lst_mid_idx + 1, lst_end_idx);
 
         mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);
-
-
     }
 }
+
+
 
 // Explicit instantiation of template for specific types
 template void PmergeMe::fordJohnsonSort(std::vector<int> &lst, int lst_start_idx, int lst_end_idx);
