@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/01/04 10:42:02 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/01/22 14:21:35 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,3 @@ int main(int argc, char **argv)
 
 	return (0);
 }
-
