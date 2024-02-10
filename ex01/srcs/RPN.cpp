@@ -1,16 +1,19 @@
 #include "RPN.hpp"
 
 // Default constructor
-RPN::RPN() {
+RPN::RPN()
+{
 }
 
 // Copy constructor
-RPN::RPN(const RPN &a) {
+RPN::RPN(const RPN &a)
+{
     this->_outcome = a._outcome; // Copy the stack from 'a' to the current object
 }
 
 // Destructor
-RPN::~RPN() {
+RPN::~RPN()
+{
 }
 
 // Assignment operator

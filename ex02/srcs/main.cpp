@@ -10,11 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
+'''
+NOTE: THIS CPP09 EX02 IMPLEMENTATION USES:
+(1) std::vector<unsigned int>
+(2) std::deque<std::pair<unsigned int, unsigned int>
+'''
+
+'''
 make re ; ./PmergeMe $(shuf -i 1-100 -n 10)
 make re ; ./PmergeMe $(shuf -i 10-100 -n 30) ;
 make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
-*/
+'''
 
 #include "PmergeMe.hpp"
 #include <iostream>

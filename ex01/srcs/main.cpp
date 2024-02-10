@@ -10,7 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// NOTE: THIS CPP09 EX01 IMPLEMENTATION USES STD::STACK<INT>
+'''
+NOTE: THIS CPP09 EX01 IMPLEMENTATION USES:
+std::stack<int>
+'''
 
 #include "RPN.hpp"
 

@@ -10,9 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// NOTE: THIS CPP09 EX00 IMPLEMENTATION USES
-// (1) STD::MAP<STD::STRING, FLOAT> FOR _EXCHANGERATEDATA
-// (2) STD::VECTOR<STD::STRING> FOR DATE_VECTOR
+'''
+NOTE: THIS CPP09 EX00 IMPLEMENTATION USES:
+(1) std::map<std::string, float>
+(2) std::vector<std::string>
+'''
 
 #include "BitcoinExchange.hpp"
 

@@ -24,10 +24,10 @@ class RPN
         RPN(const RPN& a);
         ~RPN();
         RPN& operator=(const RPN& a);
-        void    processExpression(std::string input);
-        int     calculate(int leftNumber, int rightNumber, char o);
+        void processExpression(std::string input);
+        int calculate(int leftNumber, int rightNumber, char o);
 	private:
-        std::stack<int>     _outcome;
+        std::stack<int> _outcome;
 };
 
 #endif
