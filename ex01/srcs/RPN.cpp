@@ -89,7 +89,7 @@ void RPN::processExpression(std::string input) {
         } 
         // If the current character is not recognized (neither digit, operator, nor space), throw an error
         else {
-            throw std::invalid_argument("Current character is not recognized as digit, operator, nor space\n");
+            throw std::invalid_argument("Character detected that is not a digit, operator, nor space\n");
         }
     }
     // Check if the number of operators is one less than the number of numbers

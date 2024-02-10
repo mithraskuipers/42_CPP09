@@ -51,3 +51,29 @@ make re && ./RPN "1 2 * 2 / 2 * 2 4 - +"
 make re && ./RPN "(1 + 1)"
 Error
 */
+
+/*
+Example flow for expression:
+"8 9 * 9 - 9 - 9 - 4 - 1 +"
+
+Push 8 onto the stack: [8]
+Push 9 onto the stack: [8, 9]
+Perform multiplication of top two operands (8 and 9): 8 * 9 = 72.
+Remove 8 and 9 using pop(), and push 72 onto the stack: [72]
+Push 9 onto the stack: [72, 9]
+Perform subtraction of top two operands (72 and 9): 72 - 9 = 63.
+Remove 72 and 9 using pop(), and push 63 onto the stack: [63]
+Push 9 onto the stack: [63, 9]
+Perform subtraction of top two operands (63 and 9): 63 - 9 = 54.
+Remove 63 and 9 using pop(), and push 54 onto the stack: [54]
+Push 9 onto the stack: [54, 9]
+Perform subtraction of top two operands (54 and 9): 54 - 9 = 45.
+Remove 54 and 9 using pop(), and push 45 onto the stack: [45]
+Push 4 onto the stack: [45, 4]
+Perform subtraction of top two operands (45 and 4): 45 - 4 = 41.
+Remove 45 and 4 using pop(), and push 41 onto the stack: [41]
+Push 1 onto the stack: [41, 1]
+Perform addition of top two operands (41 and 1): 41 + 1 = 42.
+Remove 41 and 1 using pop(), and push 42 onto the stack: [42]
+The final result is 42, which is outputted by the program.
+*/
