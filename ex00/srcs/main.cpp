@@ -10,6 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// NOTE: THIS CPP09 EX00 IMPLEMENTATION USES
+// (1) STD::MAP<STD::STRING, FLOAT> FOR _EXCHANGERATEDATA
+// (2) STD::VECTOR<STD::STRING> FOR DATE_VECTOR
+
 #include "BitcoinExchange.hpp"
 
 int checkExtension(const std::string& s, const std::string& suffix)
