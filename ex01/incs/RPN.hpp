@@ -10,28 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RPN_HPP
-#define RPN_HPP
+#ifndef RPN_H
+#define RPN_H
 
-#include <stack>
-#include <string>
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
+#include <iostream> // for stdin and stdout operations
+#include <stack> // to use the stack container
+#include <cstdlib> // to use exit()
 
-class RPNCalculator
+class RPN
 {
-	public:
-		RPNCalculator();
-		RPNCalculator(const std::string& expression);
-		~RPNCalculator();
-		RPNCalculator(const RPNCalculator& other);
-		RPNCalculator& operator=(const RPNCalculator& other);
-		int parseExpression(const std::string& expression);
+    public:
+        RPN();
+        RPN(const RPN& a);
+        ~RPN();
+        RPN& operator=(const RPN& a);
+        void    processExpression(std::string input);
+        int     calculate(int leftNumber, int rightNumber, char o);
 	private:
-		std::stack<int> operandStack;
-		int isOperand(const std::string& token);
-		int performOperation(const std::string& operatorToken);
+        std::stack<int>     _outcome;
 };
 
 #endif

@@ -72,14 +72,14 @@ void PmergeMe::fordJohnsonSortWrapper()
     std::cout << "After:  ";
     this->intVectorPrinter();
     duration = ((stop - start) / (double)CLOCKS_PER_SEC) * 1000000;
-    std::cout << "Time to process a range of " << this->intVector.size() << " elements with std::vector: ";
+    std::cout << "Time to processExpression a range of " << this->intVector.size() << " elements with std::vector: ";
     std::cout << duration << " us" << std::endl;
 
     start = clock();
     this->fordJohnsonSort(this->intDeque, 0, this->intDeque.size() - 1);
     stop = clock();
     duration = ((stop - start) / (double)CLOCKS_PER_SEC) * 1000000;
-    std::cout << "Time to process a range of " << this->intDeque.size() << " elements with std::deque: ";
+    std::cout << "Time to processExpression a range of " << this->intDeque.size() << " elements with std::deque: ";
     std::cout << duration << " us" << std::endl;
 }
 

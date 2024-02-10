@@ -10,28 +10,30 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+// NOTE: THIS CPP09 EX01 IMPLEMENTATION USES STD::STACK<INT>
+
 #include "RPN.hpp"
 
-int main(int argc, char** argv)
+int main(int argc, char *argv[])
 {
-	if (argc != 2)
-	{
-		std::cerr << "Usage: " << argv[0] << " <inverted Polish expression>" << std::endl;
-		return (1);
-	}
-	int	outcome;
-	try
-	{
-		RPNCalculator	calculator;
-		outcome = calculator.parseExpression(argv[1]);
-		std::cout << outcome << std::endl;
-	}
-	catch (const std::exception& error)
-	{
-		std::cerr << error.what() << std::endl; // Used to output errors
-		return (1);
-	}
-	return 0;
+    if (argc != 2) 
+    {
+        std::cerr << "Usage: " << argv[0] << " <expression>\n";
+        return 1;
+    }
+
+    try 
+    {
+        RPN calculator;
+        calculator.processExpression(argv[1]);
+    } 
+    catch (const std::exception &e) 
+    {
+        std::cerr << "Error: " << e.what();
+        return 1;
+    }
+
+    return 0;
 }
 
 /*
