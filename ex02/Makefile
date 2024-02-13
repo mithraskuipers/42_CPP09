@@ -15,7 +15,7 @@ NAME = PmergeMe
 
 # Compiler and flags
 CC = c++
-CFLAGS = -Wall -Werror -Wextra -std=c++98
+CFLAGS = -Wall -Werror -Wextra -std=c++11
 
 # Color codes for messages
 RESET = \033[0m

@@ -10,24 +10,36 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MERGE_PROCESSOR_H
-#define MERGE_PROCESSOR_H
+#ifndef PMERGE_ME_HPP
+#define PMERGE_ME_HPP
 
 #include <iostream>
+#include <sstream>
+#include <cstdlib>
+#include <cctype>
 #include <vector>
 #include <deque>
-#include <list>
-#include <algorithm>
-#include <sys/time.h>
-#include <unistd.h> 
 
 class PmergeMe
 {
-    public:
-        PmergeMe ();
-        PmergeMe (const PmergeMe &other);
-        ~PmergeMe ();
-        PmergeMe& operator=(const PmergeMe& other);
+	public:
+		PmergeMe();
+		~PmergeMe();
+		PmergeMe(const PmergeMe &other);
+		PmergeMe &operator=(const PmergeMe &other);
+		
+		
+		std::vector<int> intVector;
+		std::deque<int> intDeque;
+		void intVectorPrinter();
+		void intDequePrinter();
+		void readInput(char **argv);
+		void setPrintOutput(bool enablePrint);
+		template<typename T>
+		void fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx);
+		void fordJohnsonSortWrapper();
+		template<typename T>
+		void mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx);
 };
 
 #endif
