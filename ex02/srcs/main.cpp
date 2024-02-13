@@ -1,27 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   main.cpp                                           :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/01/22 14:21:35 by mikuiper      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-'''
-NOTE: THIS CPP09 EX02 IMPLEMENTATION USES:
-(1) std::vector<unsigned int>
-(2) std::deque<std::pair<unsigned int, unsigned int>
-'''
-
-'''
-make re ; ./PmergeMe $(shuf -i 1-100 -n 10)
-make re ; ./PmergeMe $(shuf -i 10-100 -n 30) ;
-make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
-'''
-
 #include "PmergeMe.hpp"
 #include <iostream>
 #include <vector>
@@ -34,121 +10,122 @@ make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
 bool isFlagSet = false;
 unsigned int flagValue;
 
-template <typename T, typename S, typename V>
-void processRange(int argc, T &container, S &cont, V &conta, char choice)
-{
+void merge(std::vector<unsigned int>& elements, unsigned int low, unsigned int mid, unsigned int high) {
+    unsigned int n1 = mid - low + 1;
+    unsigned int n2 = high - mid;
+
+    // Create temporary vectors to hold the two halves
+    std::vector<unsigned int> left(n1);
+    std::vector<unsigned int> right(n2);
+
+    // Copy data to temporary vectors left[] and right[]
+    for (unsigned int i = 0; i < n1; ++i)
+        left[i] = elements[low + i];
+    for (unsigned int j = 0; j < n2; ++j)
+        right[j] = elements[mid + 1 + j];
+
+    // Merge the temporary vectors back into elements[low..high]
+    unsigned int i = 0, j = 0, k = low;
+    while (i < n1 && j < n2) {
+        if (left[i] <= right[j]) {
+            elements[k] = left[i];
+            ++i;
+        } else {
+            elements[k] = right[j];
+            ++j;
+        }
+        ++k;
+    }
+
+    // Copy the remaining elements of left[], if there are any
+    while (i < n1) {
+        elements[k] = left[i];
+        ++i;
+        ++k;
+    }
+
+    // Copy the remaining elements of right[], if there are any
+    while (j < n2) {
+        elements[k] = right[j];
+        ++j;
+        ++k;
+    }
+}
+
+void mergeInsertionSort(std::vector<unsigned int>& elements, unsigned int low, unsigned int high) {
+    if (low < high) {
+        unsigned int mid = (low + high) / 2;
+
+        // Recursively sort the two halves
+        mergeInsertionSort(elements, low, mid);
+        mergeInsertionSort(elements, mid + 1, high);
+
+        // Merge the sorted halves
+        merge(elements, low, mid, high);
+    }
+}
+
+void processRange(std::vector<std::pair<unsigned int, unsigned int> >& container, bool isFirstTime) {
     struct timeval start, end;
     long sec, micro;
 
-    gettimeofday(&start, NULL);
-    for (int i = 0; i < argc; i++)
-    {
-        if (container[i].first > container[i].second)
-            std::swap(container[i].first, container[i].second);
+    if(isFirstTime) {
+        std::cout << "Before : ";
+        for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = container.begin(); it != container.end(); ++it) {
+            std::cout << (*it).first << " " << (*it).second << " ";
+        }
+        std::cout << std::endl;
     }
 
-    for (int i = 0; i < argc; i++)
-        conta.push_back(container[i].first);
+    gettimeofday(&start, NULL);
 
-    for (int i = 0; i < argc; i++)
-        cont.push_back(container[i].second);
+    // Combine all elements into a single array for sorting
+    std::vector<unsigned int> elements;
+    for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = container.begin(); it != container.end(); ++it) {
+        elements.push_back((*it).first);
+        elements.push_back((*it).second);
+    }
 
-    std::sort(conta.begin(), conta.end());
+    // Sort the elements using the Ford-Johnson algorithm
+    mergeInsertionSort(elements, 0, elements.size() - 1);
 
-    for (typename S::iterator it = cont.begin(); it != cont.end(); ++it)
-        conta.insert(std::lower_bound(conta.begin(), conta.end(), *it), *it);
-
-    if (isFlagSet)
-        conta.insert(std::lower_bound(conta.begin(), conta.end(), flagValue), flagValue);
-
+    // Print the sorted elements
     std::cout << "\nAfter  : ";
-    for (typename V::iterator it = conta.begin(); it != conta.end(); ++it)
+    for (std::vector<unsigned int>::iterator it = elements.begin(); it != elements.end(); ++it) {
         std::cout << *it << " ";
+    }
+    std::cout << std::endl;
 
     gettimeofday(&end, NULL);
     sec = end.tv_sec - start.tv_sec;
     micro = end.tv_usec - start.tv_usec;
     long diff = (sec * 1000000) + micro;
-    if (choice == 'v')
-        std::cout << "\nTime to process a range of " << argc << " elements with std::vector : " << diff << " us" << "\n";
-    if (choice == 'd')
-        std::cout << "\nTime to process a range of " << argc << " elements with std::deque : " << diff << " us" << "\n";
+    std::cout << "\nTime to process a range of " << container.size() << " elements: " << diff << " us" << "\n";
 }
 
-void validateInput(char *arg1, char *arg2)
-{
-    if (std::atoi(arg1) < 0 || std::atoi(arg2) < 0)
-    {
-        std::cerr << "Invalid Input: Number Less Than 0\n";
-        exit(0);
-    }
+void processRange(std::deque<std::pair<unsigned int, unsigned int> >& container, bool isFirstTime) {
+    // Since we cannot use Ford-Johnson with a deque directly, we convert it to a vector and then call the existing processRange function.
+    std::vector<std::pair<unsigned int, unsigned int> > vec(container.begin(), container.end());
+    processRange(vec, isFirstTime);
 }
 
-int main(int argc, char *argv[])
-{
-    if ((argc - 1) % 2 != 0)
-    {
-        isFlagSet = true;
-        flagValue = std::atoi(argv[argc - 1]);
-        if (flagValue < 0)
-            exit(1);
-        argc -= 1;
-    }
-
-    std::cout << "Before : ";
-    for (int i = 1; i < argc; i++)
-        std::cout << argv[i] << " ";
-
-    // VECTOR
+int main(int argc, char* argv[]) {
     std::vector<std::pair<unsigned int, unsigned int> > vec;
-    for (int i = 1; i < argc; i += 2)
-    {
-        if (isdigit(*argv[i]) && isdigit(*argv[i + 1]))
-        {
-            validateInput(argv[i], argv[i + 1]);
-            vec.push_back(std::make_pair(std::atoi(argv[i]), std::atoi(argv[i + 1])));
-        }
-        else
-        {
-            std::cerr << "Invalid input: non-numeric argument.\n";
-            return 1;
-        }
-    }
-    std::vector<unsigned int> vec_a, vec_b;
-    vec_a.reserve(vec.size());
-    vec_b.reserve(vec.size());
-    for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = vec.begin(); it != vec.end(); ++it)
-    {
-        vec_a.push_back(it->first);
-        vec_b.push_back(it->second);
-    }
-
-    processRange(vec.size(), vec, vec_a, vec_b, 'v');
-
-    // DEQUE
     std::deque<std::pair<unsigned int, unsigned int> > dec;
-    for (int i = 1; i < argc; i += 2)
-    {
-        if (isdigit(*argv[i]) && isdigit(*argv[i + 1]))
-        {
-            validateInput(argv[i], argv[i + 1]);
-            dec.push_back(std::make_pair(std::atoi(argv[i]), std::atoi(argv[i + 1])));
+
+    for (int i = 1; i < argc; i += 2) {
+        unsigned int start = std::atoi(argv[i]);
+        unsigned int end = std::atoi(argv[i + 1]);
+        if (start > end) {
+            std::swap(start, end);
         }
-        else
-        {
-            std::cerr << "Invalid input: non-numeric argument.\n";
-            return 1;
-        }
+        vec.push_back(std::make_pair(start, end));
+        dec.push_back(std::make_pair(start, end));
     }
 
-    std::deque<unsigned int> dec_a, dec_b;
-    for (std::deque<std::pair<unsigned int, unsigned int> >::iterator it = dec.begin(); it != dec.end(); ++it)
-    {
-        dec_a.push_back(it->first);
-        dec_b.push_back(it->second);
-    }
-
-    processRange(dec.size(), dec, dec_a, dec_b, 'd');
+    processRange(vec, true); // Print the initial user input for vector
+    std::cout << std::endl;
+    processRange(dec, false); // Do not print the initial user input for deque
 
     return 0;
 }

@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     {
         RPN calculator;
         calculator.processExpression(argv[1]);
+        
     } 
     catch (const std::exception &e) 
     {
