@@ -7,6 +7,18 @@
 #include <ctime>
 #include <sys/time.h>
 
+/*
+NOTE: THIS CPP09 EX02 IMPLEMENTATION USES:
+(1) std::vector<unsigned int>
+(2) std::deque<std::pair<unsigned int, unsigned int>
+*/
+
+/*
+make re ; ./PmergeMe $(shuf -i 1-100 -n 10)
+make re ; ./PmergeMe $(shuf -i 10-100 -n 30) ;
+make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
+*/
+
 bool isFlagSet = false;
 unsigned int flagValue;
 
@@ -69,39 +81,47 @@ void processRange(std::vector<std::pair<unsigned int, unsigned int> >& container
     struct timeval start, end;
     long sec, micro;
 
-    if(isFirstTime) {
-        std::cout << "Before : ";
-        for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = container.begin(); it != container.end(); ++it) {
-            std::cout << (*it).first << " " << (*it).second << " ";
+    if (isFirstTime) {
+        std::cout << "Before: ";
+        for (size_t i = 0; i < container.size(); ++i) {
+            std::cout << container[i].first << " " << container[i].second << " ";
         }
         std::cout << std::endl;
     }
 
     gettimeofday(&start, NULL);
 
-    // Combine all elements into a single array for sorting
+    // Combine all elements into a single vector for sorting
     std::vector<unsigned int> elements;
-    for (std::vector<std::pair<unsigned int, unsigned int> >::iterator it = container.begin(); it != container.end(); ++it) {
-        elements.push_back((*it).first);
-        elements.push_back((*it).second);
+    for (size_t i = 0; i < container.size(); ++i) {
+        elements.push_back(container[i].first);
+        elements.push_back(container[i].second);
     }
 
     // Sort the elements using the Ford-Johnson algorithm
     mergeInsertionSort(elements, 0, elements.size() - 1);
 
-    // Print the sorted elements
-    std::cout << "\nAfter  : ";
-    for (std::vector<unsigned int>::iterator it = elements.begin(); it != elements.end(); ++it) {
-        std::cout << *it << " ";
+    // Print the sorted elements only if isFirstTime is true
+    if (isFirstTime) {
+        std::cout << "After:  ";
+        for (size_t i = 0; i < elements.size(); ++i) {
+            std::cout << elements[i] << " ";
+        }
+        std::cout << std::endl;
     }
-    std::cout << std::endl;
 
     gettimeofday(&end, NULL);
     sec = end.tv_sec - start.tv_sec;
     micro = end.tv_usec - start.tv_usec;
     long diff = (sec * 1000000) + micro;
-    std::cout << "\nTime to process a range of " << container.size() << " elements: " << diff << " us" << "\n";
+    std::cout << "Time to process a range of " << container.size() * 2 << " elements: " << diff << " us";
+    if (!isFirstTime)
+        std::cout << "\n";
+
+
 }
+
+
 
 void processRange(std::deque<std::pair<unsigned int, unsigned int> >& container, bool isFirstTime) {
     // Since we cannot use Ford-Johnson with a deque directly, we convert it to a vector and then call the existing processRange function.
@@ -129,3 +149,5 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
+
+

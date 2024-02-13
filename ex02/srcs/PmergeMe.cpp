@@ -16,16 +16,16 @@ PmergeMe::PmergeMe ()
 {
 }
 
-PmergeMe::PmergeMe (const PmergeMe &other)
-{
-        this->operator=(other);
-}
-
 PmergeMe::~PmergeMe ()
 {
 }
 
-PmergeMe& PmergeMe::operator = (const PmergeMe& other)
+PmergeMe::PmergeMe(const PmergeMe& other)
+{
+        this->operator=(other);
+}
+
+PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
         (void)other;
         return(*this);

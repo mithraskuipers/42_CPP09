@@ -27,7 +27,7 @@ class PmergeMe
         PmergeMe ();
         PmergeMe (const PmergeMe &other);
         ~PmergeMe ();
-        PmergeMe& operator = (const PmergeMe& other);
+        PmergeMe& operator=(const PmergeMe& other);
 };
 
 #endif

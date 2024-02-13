@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-'''
+/*
 NOTE: THIS CPP09 EX00 IMPLEMENTATION USES:
 (1) std::map<std::string, float>
 (2) std::vector<std::string>
-'''
+*/
 
 #include "BitcoinExchange.hpp"
 
@@ -43,6 +43,7 @@ bool isValidDate(const std::string& date)
     }
     return true;
 }
+
 int main(int argc, char** argv)
 {
     if ((argc != 2) || (checkExtension(argv[1], ".txt")))
