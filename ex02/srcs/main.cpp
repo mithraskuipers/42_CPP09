@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/14 12:31:27 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/14 12:39:01 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 /*
 NOTE: THIS CPP09 EX02 IMPLEMENTATION USES:
-(1) 
-(2) 
+(1) std::vector<int>
+(2) std::deque<int>
 */
 
 /*
@@ -68,9 +68,9 @@ int main(int argc, char **argv)
 		return 1;
 	}
 
-	PmergeMe	mergeMe;
+	PmergeMe mergeMe;
 	mergeMe.readInput(argv);
-	mergeMe.setPrintOutput(1);
+	mergeMe.setPrintOutput(0);
 	mergeMe.fordJohnsonSortWrapper();
 
 	return (0);
