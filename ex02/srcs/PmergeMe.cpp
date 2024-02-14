@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        ::::::::            */
-/*   main.cpp                                           :+:    :+:            */
+/*   PmergeMe.cpp                                       :+:    :+:            */
 /*                                                     +:+                    */
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/01/22 14:21:35 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/14 12:30:47 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
 
     if (printOutput)
     {
-        std::cout << "Merging sublists: <";
+        std::cout << "Merge the following two sublists: <";
 
         for (int i = lst_start_idx; i <= mid; ++i)
         {
@@ -158,7 +158,23 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
     // Print the intermediate state of the list after merging each pair of sublists
     if (printOutput)
     {
-        std::cout << "Merged state: ";
+        std::cout << "Result of the merge: ";
+		std::cout << "<";
+        for (int i = lst_start_idx; i <= lst_end_idx; ++i)
+        {
+            std::cout << lst[i];
+            if (i < lst_end_idx)
+            {
+                std::cout << ", ";
+            }
+        }
+	std::cout << ">";
+        std::cout << std::endl;
+    }
+
+    if (printOutput)
+    {
+        std::cout << "Now sorting sublist: ";
 		std::cout << "<";
         for (int i = lst_start_idx; i <= lst_end_idx; ++i)
         {
@@ -180,6 +196,7 @@ void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx
 
     if (printOutput)
     {
+		// std::cout << "Now sorting sublist" << std::endl;
         std::cout << "Sorted sublist: <";
         for (int i = lst_start_idx; i <= lst_end_idx; ++i)
         {
@@ -204,7 +221,8 @@ void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
 
         if (printOutput)
         {
-            std::cout << "Splitting list: <";
+            std::cout << "List to split: ";
+			std::cout << "<";
             for (int i = lst_start_idx; i <= lst_end_idx; ++i)
             {
                 std::cout << lst[i];
@@ -216,14 +234,17 @@ void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
             // Check if the list has only 2 integers and print a message if so
             if (lst_end_idx - lst_start_idx == 1)
             {
-                std::cout << "cant split further" << std::endl;
+                std::cout << "Done splitting. Can't split further!" << std::endl;
             }
         }
 
         fordJohnsonSort(lst, lst_start_idx, lst_mid_idx);
         fordJohnsonSort(lst, lst_mid_idx + 1, lst_end_idx);
-
-        mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);
+		if (printOutput)
+		{
+			std::cout << "Merging via mergeSublists()" << std::endl;
+		}
+		mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);
     }
 }
 
