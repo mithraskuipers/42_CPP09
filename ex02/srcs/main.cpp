@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/14 22:12:26 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/14 22:55:48 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 NOTE: THIS CPP09 EX02 IMPLEMENTATION USES:
 (1) std::list
 (2) std::deque
+*/
+
+/*
+SOURCE:
+https://en.wikipedia.org/wiki/Merge-insertion_sort
 */
 
 #include "PmergeMe.hpp"

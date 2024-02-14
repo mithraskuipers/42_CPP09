@@ -1,5 +1,3 @@
-// PmergeMe.cpp
-
 #include "PmergeMe.hpp"
 
 const int K = 5; // Define your constant K value
@@ -72,10 +70,11 @@ void PmergeMe::takeArgs(int argc, char **argv) {
     std::cout << std::endl;
 
     // Call mergeInsert to sort the elements using the Ford-Johnson algorithm
+    std::cout << "Sorting using mergeInsert algorithm...\n";
     mergeInsert<std::list<int>>(mList.begin(), mList.end());
     mergeInsert<std::deque<int>>(mDeque.begin(), mDeque.end());
 
-    std::cout << "After:  ";
+    std::cout << "After sorting:  ";
     printSortedInput(mList);
     std::cout << std::endl;
 
@@ -92,9 +91,11 @@ void PmergeMe::mergeInsert(typename T::iterator p, typename T::iterator r) {
         std::advance(q, n / 2);
         mergeInsert<T>(p, q);
         mergeInsert<T>(q, r);
+        std::cout << "Splitting range: [" << *p << ", " << *(std::prev(r)) << "] into two subranges...\n";
         merge<T>(p, q, r);
     }
 }
+
 
 template <typename T>
 void PmergeMe::insertionSort(typename T::iterator p, typename T::iterator r) {
@@ -113,6 +114,8 @@ void PmergeMe::insertionSort(typename T::iterator p, typename T::iterator r) {
         current = next;
         it++;
     }
+    std::cout << "After insertion sorting: ";
+    printSortedRange<T>(p, r);
 }
 
 template <typename T>
@@ -153,11 +156,21 @@ void PmergeMe::merge(typename T::iterator p, typename T::iterator q, typename T:
         ++itR;
         ++itA;
     }
+    std::cout << "After merging: ";
+    printSortedRange<T>(p, r);
 }
 
 void PmergeMe::printSortedInput(const std::list<int>& sortedList) {
     for (const auto& item : sortedList) {
         std::cout << item << " ";
+    }
+    std::cout << std::endl;
+}
+
+template <typename T>
+void PmergeMe::printSortedRange(typename T::iterator p, typename T::iterator r) {
+    for (auto it = p; it != r; ++it) {
+        std::cout << *it << " ";
     }
     std::cout << std::endl;
 }

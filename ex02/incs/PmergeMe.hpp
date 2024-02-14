@@ -39,6 +39,10 @@ public:
     template <typename T>
     void merge(typename T::iterator p, typename T::iterator q, typename T::iterator r);
 
+
+
+	template <typename T>
+	void printSortedRange(typename T::iterator p, typename T::iterator r);
     void printSortedInput(const std::list<int>& sortedList);
 };
 
