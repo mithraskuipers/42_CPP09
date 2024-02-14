@@ -5,41 +5,55 @@
 /*                                                     +:+                    */
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/10/02 12:31:43 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/01/03 21:58:37 by mikuiper      ########   odam.nl         */
+/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
+/*   Updated: 2024/02/14 20:48:36 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PMERGE_ME_HPP
-#define PMERGE_ME_HPP
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
 #include <iostream>
-#include <sstream>
+#include <list>
+#include <deque>
 #include <cstdlib>
+#include <ctime>
+#include <chrono>
+#include <iomanip>
+#include <cstring>
 #include <cctype>
 #include <vector>
-#include <deque>
+#include <iterator>
 
 class PmergeMe
 {
+	private:
+		std::list<int> mList;
+		std::deque<int> mDeque;
+		size_t size;
+
 	public:
 		PmergeMe();
 		~PmergeMe();
-		PmergeMe(const PmergeMe &other);
-		PmergeMe &operator=(const PmergeMe &other);
-		
-		
-		std::vector<int> intVector;
-		std::deque<int> intDeque;
-		void intVectorPrinter();
-		void intDequePrinter();
-		void readInput(char **argv);
-		void setPrintOutput(bool enablePrint);
-		template<typename T>
-		void fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx);
-		void fordJohnsonSortWrapper();
-		template<typename T>
-		void mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx);
+		PmergeMe(std::list<int> _list, std::deque<int> _deque);
+		PmergeMe(const PmergeMe& other);
+		PmergeMe& operator=(const PmergeMe& other);
+
+		size_t isStringOnlyDigits(const char *s);
+		void takeArgs(int argc, char **argv);
+		template <typename T>
+		void insertionSort(T &A, int p, int r);
+		void printTime(std::chrono::time_point<std::chrono::high_resolution_clock> start, std::chrono::time_point<std::chrono::high_resolution_clock> end, const std::string &type);
+
+		void mergeMe(int argc, char **argv);
+		template <typename T>
+		void printSortedInput(const T &A);
+
+	private:
+		template <typename T>
+		void mergeInsert(T &A, typename T::iterator p, typename T::iterator r);
+		template <typename T>
+		void merge(T &A, typename T::iterator p, typename T::iterator q, typename T::iterator r);
 };
 
 #endif

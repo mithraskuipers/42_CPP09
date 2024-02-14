@@ -5,249 +5,226 @@
 /*                                                     +:+                    */
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
-/*   Created: 2023/09/16 17:09:26 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/14 12:39:28 by mikuiper      ########   odam.nl         */
+/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
+/*   Updated: 2024/02/14 20:48:21 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-#include <algorithm>
 
-PmergeMe::PmergeMe()
+const int K = 5; // Define your constant K value
+
+PmergeMe::PmergeMe() {}
+
+PmergeMe::~PmergeMe() {}
+
+PmergeMe::PmergeMe(std::list<int> _list, std::deque<int> _deque) : mList(_list), mDeque(_deque) {}
+
+PmergeMe::PmergeMe(const PmergeMe& other)
 {
+	*this = other;
 }
 
-PmergeMe::~PmergeMe()
+PmergeMe& PmergeMe::operator=(const PmergeMe& other)
 {
-}
-
-PmergeMe::PmergeMe(const PmergeMe &other)
-{
-	this->intVector = other.intVector;
-	this->intDeque = other.intDeque;
-}
-
-PmergeMe &PmergeMe::operator=(const PmergeMe &other)
-{
-	if (this != &other)
-	{
-		this->intVector = other.intVector;
-		this->intDeque = other.intDeque;
-	}
+	mList = other.mList;
+	mDeque = other.mDeque;
 	return (*this);
 }
 
-static bool printOutput = true;
-
-void PmergeMe::intVectorPrinter()
+// Function to check if a string contains only digits
+size_t PmergeMe::isStringOnlyDigits(const char *s)
 {
-	for (std::vector<int>::iterator it = intVector.begin(); it != intVector.end(); it++)
+	size_t len = strlen(s);
+	for (size_t i = 0; i < len; i++)
+	{
+		if (!isdigit(s[i]))
+		{
+			return (0);
+		}
+	}
+	return (1);
+}
+
+// Function to print the sorted input
+template <typename T>
+void PmergeMe::printSortedInput(const T &A)
+{
+	int count = 0;
+	typename T::const_iterator it = A.begin();
+	while (it != A.end() && count < 4)
 	{
 		std::cout << *it << " ";
+		++it;
+		++count;
 	}
-	std::cout << std::endl;
-}
-
-void PmergeMe::intDequePrinter()
-{
-	for (std::deque<int>::iterator it = intDeque.begin(); it != intDeque.end(); it++)
+	if (A.size() > 4)
 	{
-		std::cout << *it << " ";
+		std::cout << "[..]";
 	}
-	std::cout << std::endl;
 }
 
-void PmergeMe::setPrintOutput(bool enablePrint)
+// Function to process command line arguments
+void PmergeMe::takeArgs(int argc, char **argv)
 {
-	printOutput = enablePrint;
-}
-
-void PmergeMe::readInput(char **argv)
-{
-	for (int left_idx = 1; argv[left_idx]; left_idx++)
+	int n;
+	int i = 1;
+	while (i < argc)
 	{
-		this->intVector.push_back(std::atoi(argv[left_idx]));
-		this->intDeque.push_back(std::atoi(argv[left_idx]));
+		n = atoi(argv[i]);
+		if (!isStringOnlyDigits(argv[i]) || n < 0)
+		{
+			std::cerr << "Error" << std::endl;
+			exit(1);
+		}
+		mList.push_back(n);
+		mDeque.push_back(n);
+		i++;
 	}
-}
-
-void PmergeMe::fordJohnsonSortWrapper()
-{
-	double duration;
-	clock_t start, stop;
 
 	std::cout << "Before: ";
-	this->intVectorPrinter();
+	int count = 0;
+	for (int j = 1; j < argc && count < 4; ++j)
+	{
+		std::cout << argv[j] << " ";
+		++count;
+	}
+	if (argc > 5)
+	{
+		std::cout << "[..]";
+	}
+	std::cout << std::endl;
+
+	// Call mergeInsert to sort the elements using the Ford-Johnson algorithm
+	mergeInsert(mList, mList.begin(), mList.end());
+	mergeInsert(mDeque, mDeque.begin(), mDeque.end());
+
 	std::cout << "After:  ";
-	// std::vector<int>
-	start = clock();
-	this->fordJohnsonSort(this->intVector, 0, this->intVector.size() - 1);
-	stop = clock();
-	this->intVectorPrinter();
-	duration = ((stop - start) / (double)CLOCKS_PER_SEC) * 1000000;
-	std::cout << "Time to process a range of " << this->intVector.size() << " elements with std::vector: ";
-	std::cout << duration << " us" << std::endl;
-	// std::deque<int>
-	start = clock();
-	this->fordJohnsonSort(this->intDeque, 0, this->intDeque.size() - 1);
-	stop = clock();
-	duration = ((stop - start) / (double)CLOCKS_PER_SEC) * 1000000;
-	std::cout << "Time to process a range of " << this->intDeque.size() << " elements with std::deque: ";
-	std::cout << duration << " us" << std::endl;
+	printSortedInput(mList);
+
+	std::cout << std::endl;
+
+	size = argc - 1;
 }
 
+// Function to perform insertion sort
 template <typename T>
-void PmergeMe::mergeSublists(T &lst, int lst_start_idx, int mid, int lst_end_idx)
+void PmergeMe::insertionSort(T &A, int p, int r)
 {
-	// Merge sublists in-place
-	int left_idx = lst_start_idx;
-	int right_idx = mid + 1;
-
-	// Temporary vector to store merged sublists
-	std::vector<int> temp(lst_end_idx - lst_start_idx + 1);
-	int temp_index = 0;
-
-	if (printOutput)
+	typename T::iterator it = A.begin();
+	typename T::iterator ite = A.begin();
+	std::advance(it, p);
+	std::advance(ite, r + 1);
+	while (it != ite && it != A.end())
 	{
-		std::cout << "Merging the following two sublists: <";
-
-		for (int i = lst_start_idx; i <= mid; ++i)
+		typename T::iterator current = it;
+		int temp = *it;
+		typename T::iterator prev = it;
+		typename T::iterator next = prev;
+		next++;
+		while (prev != A.begin() && *(--prev) > temp)
 		{
-			std::cout << lst[i];
-			if (i < mid)
-				std::cout << ", ";
+			*current = *prev;
+			current = prev;
 		}
+		*current = temp;
+		current = next;
+		it++;
+	}
+}
 
-		std::cout << "> <";
+// Function to print processing time
+void PmergeMe::printTime(std::chrono::time_point<std::chrono::high_resolution_clock> start, std::chrono::time_point<std::chrono::high_resolution_clock> end, const std::string &type)
+{
+	auto timePassed = std::chrono::duration<double, std::micro>(end - start).count();
+	std::cout << "Time to process a range of " << size << " elements with "
+			  << type << " " << std::fixed << std::setprecision(5) << timePassed << " µs." << std::endl;
+}
 
-		for (int i = mid + 1; i <= lst_end_idx; ++i)
-		{
-			std::cout << lst[i];
-			if (i < lst_end_idx)
-				std::cout << ", ";
-		}
+// Function to perform merge sort on std::list and std::deque
+void PmergeMe::mergeMe(int argc, char **argv)
+{
+	takeArgs(argc, argv);
+
+	auto start_list = std::chrono::high_resolution_clock::now();
+	insertionSort(mList, 0, mList.size() - 1);
+	auto end_list = std::chrono::high_resolution_clock::now();
+	printTime(start_list, end_list, "std::list");
+
+	auto start_deque = std::chrono::high_resolution_clock::now();
+	insertionSort(mDeque, 0, mDeque.size() - 1);
+	auto end_deque = std::chrono::high_resolution_clock::now();
+	printTime(start_deque, end_deque, "std::deque");
+}
+
+// Function to merge and sort ranges in the merge step of merge sort
+template <typename T>
+void PmergeMe::merge(T &, typename T::iterator p, typename T::iterator q, typename T::iterator r)
+{
+	typename T::iterator i = p;
+	typename T::iterator j = q;
+	typename T::iterator k = p;
+
+	std::vector<int> L;
+	std::vector<int> R;
+
+	for (typename T::iterator it = i; it != q; ++it)
+	{
+		L.push_back(*it);
+	}
+	for (typename T::iterator it = j; it != r; ++it)
+	{
+		R.push_back(*it);
 	}
 
-	while (left_idx <= mid && right_idx <= lst_end_idx)
+	typename std::vector<int>::iterator itL = L.begin();
+	typename std::vector<int>::iterator itR = R.begin();
+
+	while (itL != L.end() && itR != R.end())
 	{
-		if (lst[left_idx] <= lst[right_idx])
+		if (*itL <= *itR)
 		{
-			temp[temp_index++] = lst[left_idx++];
+			*k = *itL;
+			++itL;
 		}
 		else
 		{
-			temp[temp_index++] = lst[right_idx++];
+			*k = *itR;
+			++itR;
 		}
+		++k;
 	}
 
-	while (left_idx <= mid)
+	while (itL != L.end())
 	{
-		temp[temp_index++] = lst[left_idx++];
+		*k = *itL;
+		++itL;
+		++k;
 	}
 
-	while (right_idx <= lst_end_idx)
+	while (itR != R.end())
 	{
-		temp[temp_index++] = lst[right_idx++];
-	}
-
-	if (printOutput)
-	{
-		std::cout << ">" << std::endl;
-	}
-
-	// Print the intermediate state of the list after merging each pair of sublists
-	if (printOutput)
-	{
-		std::cout << "Result of the merge: ";
-		std::cout << "<";
-		for (int i = lst_start_idx; i <= lst_end_idx; ++i)
-		{
-			std::cout << lst[i];
-			if (i < lst_end_idx)
-			{
-				std::cout << ", ";
-			}
-		}
-		std::cout << ">";
-		std::cout << std::endl;
-	}
-
-	if (printOutput)
-	{
-		std::cout << "Sorting sublist: ";
-		std::cout << "<";
-		for (int i = lst_start_idx; i <= lst_end_idx; ++i)
-		{
-			std::cout << lst[i];
-			if (i < lst_end_idx)
-			{
-				std::cout << ", ";
-			}
-		}
-		std::cout << ">";
-		std::cout << std::endl;
-	}
-
-	// Copy sorted elements back to the original list
-	for (int i = 0; i < temp_index; i++)
-	{
-		lst[lst_start_idx + i] = temp[i];
-	}
-
-	if (printOutput)
-	{
-		// std::cout << "Now sorting sublist" << std::endl;
-		std::cout << "Sorted sublist: <";
-		for (int i = lst_start_idx; i <= lst_end_idx; ++i)
-		{
-			std::cout << lst[i];
-			if (i < lst_end_idx)
-			{
-				std::cout << ", ";
-			}
-		}
-		std::cout << ">" << std::endl;
+		*k = *itR;
+		++itR;
+		++k;
 	}
 }
 
+// Function to perform the merge-insertion step of merge sort
 template <typename T>
-void PmergeMe::fordJohnsonSort(T &lst, int lst_start_idx, int lst_end_idx)
+void PmergeMe::mergeInsert(T &A, typename T::iterator p, typename T::iterator r)
 {
-	int lst_mid_idx;
-
-	if (lst_start_idx != lst_end_idx)
+	int n = std::distance(p, r);
+	if (n <= K)
 	{
-		lst_mid_idx = lst_start_idx + ((lst_end_idx - lst_start_idx) / 2);
-
-		if (printOutput)
-		{
-			std::cout << "List to split: ";
-			std::cout << "<";
-			for (int i = lst_start_idx; i <= lst_end_idx; ++i)
-			{
-				std::cout << lst[i];
-				if (i < lst_end_idx)
-					std::cout << ", ";
-			}
-			std::cout << ">" << std::endl;
-
-			// Check if the list has only 2 integers and print a message if so
-			if (lst_end_idx - lst_start_idx == 1)
-			{
-				std::cout << "Done splitting. Can't split further!" << std::endl;
-			}
-		}
-
-		fordJohnsonSort(lst, lst_start_idx, lst_mid_idx);
-		fordJohnsonSort(lst, lst_mid_idx + 1, lst_end_idx);
-		if (printOutput)
-		{
-			std::cout << "Merging the two sorted sublists via mergeSublists()" << std::endl;
-		}
-		mergeSublists(lst, lst_start_idx, lst_mid_idx, lst_end_idx);
+		insertionSort(A, std::distance(A.begin(), p), std::distance(A.begin(), r) - 1);
+	}
+	else
+	{
+		typename T::iterator q = p;
+		std::advance(q, n / 2);
+		mergeInsert(A, p, q);
+		mergeInsert(A, q, r);
+		merge(A, p, q, r);
 	}
 }
-
-// Explicit instantiation of template for specific types
-template void PmergeMe::fordJohnsonSort(std::vector<int> &lst, int lst_start_idx, int lst_end_idx);
-template void PmergeMe::fordJohnsonSort(std::deque<int> &lst, int lst_start_idx, int lst_end_idx);
