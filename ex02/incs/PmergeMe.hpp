@@ -1,59 +1,45 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   PmergeMe.hpp                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/14 20:48:36 by mikuiper      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
+// PmergeMe.hpp
 
-#ifndef PMERGEME_HPP
-#define PMERGEME_HPP
+#ifndef PMERGE_ME_HPP
+#define PMERGE_ME_HPP
 
 #include <iostream>
 #include <list>
 #include <deque>
-#include <cstdlib>
-#include <ctime>
 #include <chrono>
-#include <iomanip>
 #include <cstring>
-#include <cctype>
 #include <vector>
-#include <iterator>
+#include <cctype>
+#include <algorithm>
 
-class PmergeMe
-{
-	private:
-		std::list<int> mList;
-		std::deque<int> mDeque;
-		size_t size;
+class PmergeMe {
+private:
+    std::list<int> mList;
+    std::deque<int> mDeque;
+    size_t size;
 
-	public:
-		PmergeMe();
-		~PmergeMe();
-		PmergeMe(std::list<int> _list, std::deque<int> _deque);
-		PmergeMe(const PmergeMe& other);
-		PmergeMe& operator=(const PmergeMe& other);
+public:
+    PmergeMe();
+    ~PmergeMe();
+    PmergeMe(std::list<int> _list, std::deque<int> _deque);
+    PmergeMe(const PmergeMe &other);
+    PmergeMe &operator=(const PmergeMe &other);
 
-		size_t isStringOnlyDigits(const char *s);
-		void takeArgs(int argc, char **argv);
-		template <typename T>
-		void insertionSort(T &A, int p, int r);
-		void printTime(std::chrono::time_point<std::chrono::high_resolution_clock> start, std::chrono::time_point<std::chrono::high_resolution_clock> end, const std::string &type);
+    void printTime(std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end, const std::string& label);
+    void mergeMe(int argc, char **argv);
+    size_t isStringOnlyDigits(const char *s);
+    void takeArgs(int argc, char **argv);
 
-		void mergeMe(int argc, char **argv);
-		template <typename T>
-		void printSortedInput(const T &A);
+    template <typename T>
+    void mergeInsert(typename T::iterator p, typename T::iterator r);
 
-	private:
-		template <typename T>
-		void mergeInsert(T &A, typename T::iterator p, typename T::iterator r);
-		template <typename T>
-		void merge(T &A, typename T::iterator p, typename T::iterator q, typename T::iterator r);
+    template <typename T>
+    void insertionSort(typename T::iterator p, typename T::iterator r);
+
+    template <typename T>
+    void merge(typename T::iterator p, typename T::iterator q, typename T::iterator r);
+
+    void printSortedInput(const std::list<int>& sortedList);
 };
 
-#endif
+#endif // PMERGE_ME_HPP
