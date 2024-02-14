@@ -1,6 +1,6 @@
 #include "PmergeMe.hpp"
 
-const int K = 5; // Define your constant K value
+const int K = 5;
 
 PmergeMe::PmergeMe() {}
 
@@ -10,29 +10,24 @@ PmergeMe::PmergeMe(std::list<int> _list, std::deque<int> _deque) : mList(_list),
 
 PmergeMe::PmergeMe(const PmergeMe &other)
 {
-	*this = other;
+	// Deep copy of the mList
+	mList = other.mList;
+
+	// Deep copy of the mDeque
+	mDeque = other.mDeque;
 }
 
 PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 {
-	mList = other.mList;
-	mDeque = other.mDeque;
-	return (*this);
-}
+	if (this != &other) // Self-assignment check
+	{
+		// Deep copy of the mList
+		mList = other.mList;
 
-void PmergeMe::mergeMe(int argc, char **argv)
-{
-	takeArgs(argc, argv);
-
-	auto start_list = std::chrono::high_resolution_clock::now();
-	insertionSort<std::list<int>>(mList.begin(), mList.end());
-	auto end_list = std::chrono::high_resolution_clock::now();
-	printTime(start_list, end_list, "std::list");
-
-	auto start_deque = std::chrono::high_resolution_clock::now();
-	insertionSort<std::deque<int>>(mDeque.begin(), mDeque.end());
-	auto end_deque = std::chrono::high_resolution_clock::now();
-	printTime(start_deque, end_deque, "std::deque");
+		// Deep copy of the mDeque
+		mDeque = other.mDeque;
+	}
+	return *this;
 }
 
 size_t PmergeMe::isStringOnlyDigits(const char *s)
@@ -61,41 +56,41 @@ void PmergeMe::mergeInsert(typename T::iterator p, typename T::iterator r)
 		typename T::iterator q = p;
 		std::advance(q, n / 2);
 
-		// Print the original values that will be split
-		std::cout << "Original values: ";
-		printSortedRange<T>(p, r);
-		std::cout << '\n';
+		if (debugMode)
+		{
+			// Print the original values that will be split
+			std::cout << "Original values: ";
+			printSortedRange<T>(p, r);
+			std::cout << '\n';
 
-		std::cout << "Splitting range into two subranges...\n";
+			std::cout << "Splitting range into two subranges...\n";
 
-		// Print the left set
-		std::cout << "Left set: ";
-		printSortedRange<T>(p, q);
-		std::cout << '\n';
+			// Print the left set
+			std::cout << "Left set: ";
+			printSortedRange<T>(p, q);
+			std::cout << '\n';
 
-		// Print the right set
-		std::cout << "Right set: ";
-		printSortedRange<T>(q, r);
-		std::cout << '\n';
+			// Print the right set
+			std::cout << "Right set: ";
+			printSortedRange<T>(q, r);
+			std::cout << '\n';
+		}
 
 		mergeInsert<T>(p, q);
 		mergeInsert<T>(q, r);
+		if (debugMode)
+		{
 
-		// Print how it is being processed and sorted
-		std::cout << "Sorting sets: ";
-		printSortedRange<T>(p, q);
-		std::cout << "and ";
-		printSortedRange<T>(q, r);
-		std::cout << '\n';
+			// Print how it is being processed and sorted
+			std::cout << "Sorting sets: ";
+			printSortedRange<T>(p, q);
+			std::cout << "and ";
+			printSortedRange<T>(q, r);
+			std::cout << '\n';
+		}
 
 		merge<T>(p, q, r);
 	}
-}
-
-void PmergeMe::printTime(std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end, const std::string &label)
-{
-	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-	std::cout << label << " duration: " << duration.count() << " microseconds\n";
 }
 
 template <typename T>
@@ -111,38 +106,73 @@ void PmergeMe::takeArgs(int argc, char **argv)
 {
 	int n;
 	int i = 1;
-	std::cout << "Before sorting: ";
+
+	// Check if the input consists only of digits and is non-negative
 	while (i < argc)
 	{
-		n = atoi(argv[i]);
-		if (!isStringOnlyDigits(argv[i]) || n < 0)
+		if (!isStringOnlyDigits(argv[i]) || (n = atoi(argv[i])) < 0)
 		{
 			std::cerr << "Error" << std::endl;
 			exit(1);
 		}
+
 		mList.push_back(n);
 		mDeque.push_back(n);
-		std::cout << n << " "; // Print each element as it is added
 		i++;
 	}
-	std::cout << std::endl; // Add newline after printing the original sequence
+
+	// Print the mList original as received with cutoff if enabled
+	std::cout << "Before: ";
+	printListWithCutoff(mList);
+	std::cout << std::endl;
 
 	// Call mergeInsert to sort the elements using the Ford-Johnson algorithm
-	std::cout << "Sorting using mergeInsert algorithm...\n";
+	if (debugMode)
+	{
+		std::cout << "Sorting using mergeInsert algorithm...\n";
+	}
 	mergeInsert<std::list<int>>(mList.begin(), mList.end());
-	std::cout << "============================================================================" << std::endl;
+	if (debugMode)
+	{
+		std::cout << "============================================================================" << std::endl;
+	}
 	mergeInsert<std::deque<int>>(mDeque.begin(), mDeque.end());
-	std::cout << "============================================================================" << std::endl;
-
+	if (debugMode)
+	{
+		std::cout << "============================================================================" << std::endl;
+	}
 	size = argc - 1;
+}
+
+void PmergeMe::printListWithCutoff(const std::list<int> &list) const
+{
+	if (cutoffMode && list.size() > 4)
+	{
+		auto it = list.begin();
+		for (int i = 0; i < 4; ++i)
+		{
+			std::cout << *it++ << " ";
+		}
+		std::cout << "[..]";
+	}
+	else
+	{
+		for (auto num : list)
+		{
+			std::cout << num << " ";
+		}
+	}
 }
 
 template <typename T>
 void PmergeMe::insertionSort(typename T::iterator p, typename T::iterator r)
 {
-	std::cout << "Before insertion sorting: ";
-	printSortedRange<T>(p, r);
-	std::cout << '\n';
+	if (debugMode)
+	{
+		std::cout << "Before insertion sorting: ";
+		printSortedRange<T>(p, r);
+		std::cout << '\n';
+	}
 
 	typename T::iterator it = p;
 	while (it != r)
@@ -161,9 +191,32 @@ void PmergeMe::insertionSort(typename T::iterator p, typename T::iterator r)
 		current = next;
 		it++;
 	}
-	std::cout << "After insertion sorting: ";
-	printSortedRange<T>(p, r);
-	std::cout << '\n';
+
+	if (!afterPrinted)
+	{
+		std::cout << "After:  ";
+		afterPrinted = true; // Mark as printed
+		printSortedRangeWithCutoff<T>(p, r);
+		std::cout << '\n';
+	}
+}
+
+template <typename T>
+void PmergeMe::printSortedRangeWithCutoff(typename T::iterator p, typename T::iterator r)
+{
+	if (cutoffMode && std::distance(p, r) > 4)
+	{
+		auto it = p;
+		for (int i = 0; i < 4; ++i)
+		{
+			std::cout << *it++ << " ";
+		}
+		std::cout << "[..]";
+	}
+	else
+	{
+		printSortedRange<T>(p, r);
+	}
 }
 
 template <typename T>
@@ -180,23 +233,44 @@ void PmergeMe::merge(typename T::iterator p, typename T::iterator q, typename T:
 
 	while (itL != L.end() && itR != R.end())
 	{
-		std::cout << "Comparing: " << *itL << " with " << *itR << '\n';
+		if (debugMode)
+		{
+
+			std::cout << "Comparing: " << *itL << " with " << *itR << '\n';
+		}
 		if (*itL <= *itR)
 		{
-			std::cout << *itL << " is smaller, adding it to the merged result.\n";
+			if (debugMode)
+			{
+
+				std::cout << *itL << " is smaller, adding it to the merged result.\n";
+			}
 			merged.push_back(*itL);
-			std::cout << "Current merged result: ";
-			printSortedRange<std::vector<int>>(merged.begin(), merged.end());
-			std::cout << '\n';
+
+			if (debugMode)
+			{
+
+				std::cout << "Current merged result: ";
+				printSortedRange<std::vector<int>>(merged.begin(), merged.end());
+				std::cout << '\n';
+			}
 			++itL;
 		}
 		else
 		{
-			std::cout << *itR << " is smaller, adding it to the merged result.\n";
+			if (debugMode)
+			{
+
+				std::cout << *itR << " is smaller, adding it to the merged result.\n";
+			}
 			merged.push_back(*itR);
-			std::cout << "Current merged result: ";
-			printSortedRange<std::vector<int>>(merged.begin(), merged.end());
-			std::cout << '\n';
+			if (debugMode)
+			{
+
+				std::cout << "Current merged result: ";
+				printSortedRange<std::vector<int>>(merged.begin(), merged.end());
+				std::cout << '\n';
+			}
 			++itR;
 		}
 	}
@@ -220,7 +294,52 @@ void PmergeMe::merge(typename T::iterator p, typename T::iterator q, typename T:
 	}
 
 	// Print the merged result
-	std::cout << "Merged result: ";
-	printSortedRange<T>(p, r);
-	std::cout << '\n';
+	if (debugMode)
+	{
+
+		std::cout << "Merged result: ";
+		printSortedRange<T>(p, r);
+		std::cout << '\n';
+	}
+}
+
+#include <iomanip> // Include for setprecision
+
+template <typename Container>
+void PmergeMe::printTime(std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end)
+{
+	auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count(); // Duration in microseconds
+
+	std::string containerType;
+	if (typeid(Container) == typeid(std::list<int>))
+	{
+		containerType = "std::list";
+	}
+	else if (typeid(Container) == typeid(std::deque<int>))
+	{
+		containerType = "std::deque";
+	}
+	else
+	{
+		containerType = "Unknown";
+	}
+
+	// Use setprecision to set the number of decimal places for microseconds
+	std::cout << std::fixed << std::setprecision(5);
+	std::cout << "Time to process a range of " << K << " elements with " << containerType << " : " << static_cast<double>(duration) / 1000000.0 << " us\n";
+}
+
+void PmergeMe::mergeMe(int argc, char **argv)
+{
+	takeArgs(argc, argv);
+
+	auto start_list = std::chrono::high_resolution_clock::now();
+	insertionSort<std::list<int>>(mList.begin(), mList.end());
+	auto end_list = std::chrono::high_resolution_clock::now();
+	printTime<std::list<int>>(start_list, end_list);
+
+	auto start_deque = std::chrono::high_resolution_clock::now();
+	insertionSort<std::deque<int>>(mDeque.begin(), mDeque.end());
+	auto end_deque = std::chrono::high_resolution_clock::now();
+	printTime<std::deque<int>>(start_deque, end_deque);
 }
