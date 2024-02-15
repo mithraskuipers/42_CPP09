@@ -11,6 +11,7 @@
 #include <vector>
 #include <cctype>
 #include <algorithm>
+#include <iomanip> // For setprecision
 
 class PmergeMe
 {
@@ -27,8 +28,8 @@ public:
 	PmergeMe(const PmergeMe &other);
 	PmergeMe &operator=(const PmergeMe &other);
 
-	template <typename Container>
-	void printTime(std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end);
+template <typename Container>
+void printTime(const Container& container, std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end);
 
 	void mergeMe(int argc, char **argv);
 	size_t isStringOnlyDigits(const char *s);
@@ -56,4 +57,4 @@ public:
 	bool cutoffMode = true;
 };
 
-#endif // PMERGE_ME_HPP
+#endif

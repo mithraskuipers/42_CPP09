@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/15 00:50:21 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/15 13:05:33 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ make re ; ./PmergeMe $(shuf -i 10-100 -n 30) ;
 make re ; ./PmergeMe $(shuf -i 1-100000 -n 3000) ;
 
 For explanations:
-make re ; ./PmergeMe 4 1 3 2 ;
+make re ; ./PmergeMe 4 1 3 2 8 ;
 */
 
 /*
@@ -39,8 +39,8 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	PmergeMe p;
-	p.debugMode = 1;
-	p.cutoffMode = 0;
+	p.debugMode = 0;
+	p.cutoffMode = 1;
 	p.mergeMe(argc, argv);
 	return (0);
 }
