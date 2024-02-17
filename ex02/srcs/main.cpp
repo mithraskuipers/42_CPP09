@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/15 13:05:33 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/17 18:30:16 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 		return (1);
 	}
 	PmergeMe p;
-	p.debugMode = 0;
+	p.debugMode = 1;
 	p.cutoffMode = 1;
 	p.mergeMe(argc, argv);
 	return (0);
