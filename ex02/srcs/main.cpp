@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/17 19:46:52 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/18 17:20:33 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,57 @@ SOURCE:
 https://en.wikipedia.org/wiki/Merge-insertion_sort
 */
 
-#include "PmergeMe.hpp"
+#include "../incs/PmergeMe.hpp"
+#include <iostream>
+#include <vector>
+#include <deque>
+#include <sstream>
 
 int main(int argc, char **argv)
 {
-	if (argc < 2)
+	try
 	{
-		std::cerr << "Usage: " << argv[0] << " n1 n2 n3 ..." << std::endl;
-		return (1);
+		if (argc < 2)
+			throw ": Enter args";
+
+		// Initialize containers
+		std::vector<int> Vec;
+		std::deque<int> Deq;
+		double vectorSortingTime;
+		double dequeSortingTime;
+		int number;
+
+		// Populate containers from command line arguments
+		for (int index = 1; index < argc; index++)
+		{
+			std::stringstream readstring(argv[index]);
+			if (!(readstring >> number) || !(readstring.eof()))
+			{
+				throw "";
+			}
+			if (number < 0)
+			{
+				throw ": Negative number !";
+			}
+			Vec.push_back(number);
+			Deq.push_back(number);
+		}
+
+		// Print initial state
+		PmergeMe::print(Vec, Deq);
+
+		// Calculate sorting time
+		PmergeMe::trackTime(Vec, Deq, vectorSortingTime, dequeSortingTime);
+
+		// Print sorted state and sorting times
+		PmergeMe::print(Vec, Deq);
+		std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << vectorSortingTime << " us" << std::endl;
+		std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque :  " << dequeSortingTime << " us" << std::endl;
 	}
-	PmergeMe p;
-	p.debugMode = 1;
-	p.cutoffMode = 1;
-	p.mergeMe(argc, argv);
-	return (0);
+	catch (const char *errorMsg)
+	{
+		std::cout << "Error " << errorMsg << std::endl;
+	}
+
+	return 0;
 }

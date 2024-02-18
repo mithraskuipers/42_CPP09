@@ -1,325 +1,241 @@
+#include "../incs/PmergeMe.hpp"
 
-
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   PmergeMe.cpp                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/17 19:01:54 by mikuiper      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
-
-#include "PmergeMe.hpp"
-
-// Utility function to check if a string contains only digits
-size_t PmergeMe::isStringOnlyDigits(const char *s)
-{
-	size_t len = strlen(s);
-	for (size_t i = 0; i < len; i++)
-	{
-		if (!isdigit(s[i]))
-		{
-			return (0);
-		}
-	}
-	return (1);
-}
-
-
-// Default constructor
-PmergeMe::PmergeMe()
-{
-}
-
-// Destructor
-PmergeMe::~PmergeMe()
-{
-}
-
-// Parameterized constructor
-PmergeMe::PmergeMe(std::list<int> _list, std::deque<int> _deque) : mList(_list), mDeque(_deque)
-{
-}
-
-// Copy constructor
-PmergeMe::PmergeMe(const PmergeMe &other)
-{
-	// Deep copy of the mList
-	mList = other.mList;
-
-	// Deep copy of the mDeque
-	mDeque = other.mDeque;
-}
-
-// Assignment operator
+PmergeMe::PmergeMe(){};
+PmergeMe::~PmergeMe(){};
 PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 {
-	if (this != &other) // Self-assignment check
+	if (this == &other)
 	{
-		// Deep copy of the mList
-		mList = other.mList;
-
-		// Deep copy of the mDeque
-		mDeque = other.mDeque;
+		return *this;
 	}
-	return (*this);
+	return *this;
+};
+PmergeMe::PmergeMe(const PmergeMe &other)
+{
+	(void)(other);
+};
+
+/***************************************Vector sorting part***************************************/
+void PmergeMe::fordJohnsonVector(std::vector<int> &container, int start, int end)
+{
+	int newEnd;
+	if (start < end)
+	{
+		if ((end - start) < 10)
+			insertSortVector(container, start, end);
+		else
+		{
+			newEnd = start + (end - start) / 2;
+			fordJohnsonVector(container, start, newEnd);
+			fordJohnsonVector(container, START(newEnd), end);
+			mergeSortVector(container, start, newEnd, end);
+		}
+	}
+};
+
+void PmergeMe::mergeSortVector(std::vector<int> &container, int start, int mid, int end)
+{
+	int i, j, k;
+
+	std::vector<int> left(mid - start + 1);
+	std::vector<int> right(end - mid);
+
+	for (i = 0; i < (mid - start + 1); ++i)
+		left[i] = container[start + i];
+	for (j = 0; j < (end - mid); ++j)
+		right[j] = container[mid + 1 + j];
+	i = 0;
+	j = 0;
+	k = start;
+	while (i < (mid - start + 1) && j < (end - mid))
+	{
+		if (left[i] <= right[j])
+			container[k++] = left[i++];
+		else
+			container[k++] = right[j++];
+	}
+
+	while (i < (mid - start + 1))
+		container[k++] = left[i++];
+	while (j < (end - mid))
+		container[k++] = right[j++];
+};
+
+void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
+{
+	for (int index = START(start); index <= end; index++)
+	{
+		int hold = container[index];
+		int j = index - 1;
+		for (; j >= start && container[j] > hold; --j)
+			container[j + 1] = container[j];
+		container[j + 1] = hold;
+	}
+};
+
+void PmergeMe::runVector(std::vector<int> &container)
+{
+	fordJohnsonVector(container, 0, container.size() - 1);
+};
+
+void PmergeMe::runDeque(std::deque<int> &container)
+{
+	fordJohnsonDeque(container, 0, container.size() - 1);
+};
+
+/***************************************Deque sorting part***************************************/
+void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end)
+{
+	int newEnd;
+	if (start < end)
+	{
+		if ((end - start) < 10)
+			insertSortDeque(container, start, end);
+		else
+		{
+			newEnd = start + (end - start) / 2;
+			fordJohnsonDeque(container, start, newEnd);
+			fordJohnsonDeque(container, START(newEnd), end);
+			mergeSortDeque(container, start, newEnd, end);
+		}
+	}
+};
+
+void PmergeMe::mergeSortDeque(std::deque<int> &container, int start, int mid, int end)
+{
+	int i, j, k;
+
+	std::deque<int> left(mid - start + 1);
+	std::deque<int> right(end - mid);
+
+	for (i = 0; i < (mid - start + 1); ++i)
+		left[i] = container[start + i];
+	for (j = 0; j < (end - mid); ++j)
+		right[j] = container[mid + 1 + j];
+	i = 0;
+	j = 0;
+	k = start;
+	while (i < (mid - start + 1) && j < (end - mid))
+	{
+		if (left[i] <= right[j])
+			container[k++] = left[i++];
+		else
+			container[k++] = right[j++];
+	}
+
+	while (i < (mid - start + 1))
+		container[k++] = left[i++];
+	while (j < (end - mid))
+		container[k++] = right[j++];
+};
+
+void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
+{
+	for (int index = START(start); index <= end; index++)
+	{
+		int hold = container[index];
+		int j = index - 1;
+		for (; j >= start && container[j] > hold; --j)
+			container[j + 1] = container[j];
+		container[j + 1] = hold;
+	}
+};
+
+// void trackTime(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, double &vecTime, double &deqTime)
+// {
+// 	std::clock_t start = std::clock();
+// 	PmergeMe::runVector(Vcontainer);
+// 	std::clock_t end = std::clock();
+// 	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+// 	vecTime = elapsed;
+// 	start = std::clock();
+// 	PmergeMe::runDeque(Dcontainer);
+// 	end = std::clock();
+// 	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+// 	deqTime = elapsed;
+// }
+
+// void print(std::vector<int> &Vec, std::deque<int> &Deq)
+// {
+
+// 	static int i = 0;
+
+// 	if (!i)
+// 		std::cout << "Vector "
+// 				  << "before : " << std::endl;
+// 	else
+// 		std::cout << "Vector "
+// 				  << "after : " << std::endl;
+
+// 	typedef typename std::vector<int>::const_iterator Viterator;
+// 	for (Viterator Vit = Vec.begin(); Vit != Vec.end(); ++Vit)
+// 		std::cout << *Vit << " ";
+// 	std::cout << std::endl;
+
+// 	if (!i)
+// 		std::cout << "Deque "
+// 				  << " before : " << std::endl;
+// 	else
+// 		std::cout << "Deque "
+// 				  << " after : " << std::endl;
+// 	typedef typename std::deque<int>::const_iterator Diterator;
+// 	for (Diterator Dit = Deq.begin(); Dit != Deq.end(); ++Dit)
+// 		std::cout << *Dit << " ";
+// 	std::cout << std::endl;
+// 	i++;
+// }
+
+// int findSplitIndex(int start, int end)
+// {
+// 	// Integer division
+// 	return (start + (end - start) / 2);
+// }
+
+void PmergeMe::trackTime(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, double &vecTime, double &deqTime)
+{
+    std::clock_t start = std::clock();
+    PmergeMe::runVector(Vcontainer);
+    std::clock_t end = std::clock();
+    double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+    vecTime = elapsed;
+    start = std::clock();
+    PmergeMe::runDeque(Dcontainer);
+    end = std::clock();
+    elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+    deqTime = elapsed;
 }
 
-
-
-// Function to process command line arguments
-void PmergeMe::takeArgs(int argc, char **argv)
+void PmergeMe::print(std::vector<int> &Vec, std::deque<int> &Deq)
 {
-    int n;
-    int i = 1;
+    static int i = 0;
 
-    // Check if the input consists only of digits and is non-negative
-    while (i < argc)
-    {
-        if (!isStringOnlyDigits(argv[i]) || (n = atoi(argv[i])) < 0)
-        {
-            std::cerr << "Error" << std::endl;
-            exit(1);
-        }
+    if (!i)
+        std::cout << "Vector "
+                  << "before : " << std::endl;
+    else
+        std::cout << "Vector "
+                  << "after : " << std::endl;
 
-        mList.push_back(n);
-        mDeque.push_back(n);
-        i++;
-    }
-
-    // Print the original list with or without cutoff
-    std::cout << "Before: ";
-    printListWithCutoff(mList);
+    typedef typename std::vector<int>::const_iterator Viterator;
+    for (Viterator Vit = Vec.begin(); Vit != Vec.end(); ++Vit)
+        std::cout << *Vit << " ";
     std::cout << std::endl;
 
-    // Call mergeInsert to sort the elements using the Ford-Johnson algorithm
-    if (debugMode)
-    {
-        std::cout << "\n=LIST=\n" << std::endl;
-    }
-    mergeInsert<std::list<int>>(mList.begin(), mList.end());
-    if (debugMode)
-    {
-        std::cout << "\n=DEQUE=\n" << std::endl;
-    }
-    mergeInsert<std::deque<int>>(mDeque.begin(), mDeque.end());
-    size = argc - 1;
-}
-
-// Function to perform sorting and measure time
-void PmergeMe::mergeMe(int argc, char **argv)
-{
-    takeArgs(argc, argv);
-
-    auto start_list = std::chrono::high_resolution_clock::now();
-    insertionSort<std::list<int>>(mList.begin(), mList.end());
-    auto end_list = std::chrono::high_resolution_clock::now();
-    printTime(mList, start_list, end_list);
-
-    auto start_deque = std::chrono::high_resolution_clock::now();
-    insertionSort<std::deque<int>>(mDeque.begin(), mDeque.end());
-    auto end_deque = std::chrono::high_resolution_clock::now();
-    printTime(mDeque, start_deque, end_deque);
-}
-
-// Recursive function to perform merge-insertion sort
-template <typename T>
-void PmergeMe::mergeInsert(typename T::iterator p, typename T::iterator r)
-{
-    int n = std::distance(p, r);
-    if (n <= 1)
-    {
-        return; // Base case: no need to sort if the range has 1 or fewer elements
-    }
+    if (!i)
+        std::cout << "Deque "
+                  << " before : " << std::endl;
     else
-    {
-        typename T::iterator q = p;
-        std::advance(q, n / 2);
-
-        // Recursively sort the left and right halves
-        if (debugMode)
-        {
-            std::cout << "Left half: ";
-            printSortedRange<T>(p, q);
-            std::cout << std::endl;
-
-            std::cout << "Right half: ";
-            printSortedRange<T>(q, r);
-            std::cout << std::endl;
-        }
-        mergeInsert<T>(p, q);
-        mergeInsert<T>(q, r);
-
-        // Merge the sorted halves
-        merge<T>(p, q, r);
-    }
+        std::cout << "Deque "
+                  << " after : " << std::endl;
+    typedef typename std::deque<int>::const_iterator Diterator;
+    for (Diterator Dit = Deq.begin(); Dit != Deq.end(); ++Dit)
+        std::cout << *Dit << " ";
+    std::cout << std::endl;
+    i++;
 }
 
-// Function to merge two sorted halves of a container
-template <typename T>
-void PmergeMe::merge(typename T::iterator p, typename T::iterator q, typename T::iterator r)
+int PmergeMe::findSplitIndex(int start, int end)
 {
-    std::vector<int> L(p, q);
-    std::vector<int> R(q, r);
-
-    typename T::iterator itA = p;
-    typename std::vector<int>::iterator itL = L.begin();
-    typename std::vector<int>::iterator itR = R.begin();
-
-    std::vector<int> merged;
-
-    while (itL != L.end() && itR != R.end())
-    {
-        if (*itL <= *itR)
-        {
-            merged.push_back(*itL);
-            itL++;
-        }
-        else
-        {
-            merged.push_back(*itR);
-            itR++;
-        }
-    }
-
-    while (itL != L.end())
-    {
-        merged.push_back(*itL);
-        itL++;
-    }
-
-    while (itR != R.end())
-    {
-        merged.push_back(*itR);
-        itR++;
-    }
-
-    for (const auto &element : merged)
-    {
-        *itA = element;
-        ++itA;
-    }
+    // Integer division
+    return (start + (end - start) / 2);
 }
-
-// Function to perform insertion sort
-template <typename T>
-void PmergeMe::insertionSort(typename T::iterator p, typename T::iterator r)
-{
-    if (debugMode)
-    {
-        std::cout << "Before insertion sorting: ";
-        printSortedRange<T>(p, r);
-        std::cout << '\n';
-    }
-
-    typename T::iterator it = p;
-    while (it != r)
-    {
-        typename T::iterator current = it;
-        int temp = *it;
-        typename T::iterator prev = it;
-        typename T::iterator next = prev;
-        next++;
-        while (prev != p && *(--prev) > temp)
-        {
-            *current = *prev;
-            current = prev;
-        }
-        *current = temp;
-        current = next;
-        it++;
-    }
-
-    if (!afterPrinted)
-    {
-        std::cout << "After:  ";
-        afterPrinted = true;
-        printSortedRangeWithCutoff<T>(p, r);
-        std::cout << '\n';
-    }
-}
-
-
-
-// Utility function to print a list with cutoff if enabled
-void PmergeMe::printListWithCutoff(const std::list<int> &list) const
-{
-	if (cutoffMode && list.size() > 4)
-	{
-		auto it = list.begin();
-		for (int i = 0; i < 4; ++i)
-		{
-			std::cout << *it++ << " ";
-		}
-		std::cout << "[..]";
-	}
-	else
-	{
-		for (auto num : list)
-		{
-			std::cout << num << " ";
-		}
-	}
-}
-
-// Utility function to print a sorted range with cutoff if enabled
-template <typename T>
-void PmergeMe::printSortedRangeWithCutoff(typename T::iterator p, typename T::iterator r)
-{
-	if (cutoffMode && std::distance(p, r) > 4)
-	{
-		auto it = p;
-		for (int i = 0; i < 4; ++i)
-		{
-			std::cout << *it++ << " ";
-		}
-		std::cout << "[..]";
-	}
-	else
-	{
-		printSortedRange<T>(p, r);
-	}
-}
-
-// Utility function to print a sorted range
-template <typename T>
-void PmergeMe::printSortedRange(typename T::iterator p, typename T::iterator r)
-{
-	for (auto it = p; it != r; ++it)
-	{
-		std::cout << *it << " ";
-	}
-}
-
-// Utility function to print the time taken to process a range of elements
-template <typename Container>
-void PmergeMe::printTime(const Container &container, std::chrono::time_point<std::chrono::system_clock> start, std::chrono::time_point<std::chrono::system_clock> end)
-{
-	auto duration_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count(); // Duration in nanoseconds
-
-	std::string containerType;
-	if (typeid(Container) == typeid(std::list<int>))
-	{
-		containerType = "std::list";
-	}
-	else if (typeid(Container) == typeid(std::deque<int>))
-	{
-		containerType = "std::deque";
-	}
-	else
-	{
-		containerType = "Unknown";
-	}
-
-	// Get the number of elements in the container
-	size_t numElements = container.size();
-
-	// Use setprecision to set the number of decimal places for microseconds
-	std::cout << std::fixed << std::setprecision(5);
-	std::cout << "Time to process a range of " << numElements << " elements with " << containerType << " : " << static_cast<double>(duration_ns) / 1000.0 << " us\n";
-}
-

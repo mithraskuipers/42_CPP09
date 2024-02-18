@@ -6,14 +6,18 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/12/29 23:06:04 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/18 16:59:35 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
 NOTE: THIS CPP09 EX00 IMPLEMENTATION USES:
 (1) std::map<std::string, float>
-(2) std::vector<std::string>
+(2) std::list<std::string>
+*/
+
+/*
+make re ; ./btc input.txt
 */
 
 #include "BitcoinExchange.hpp"

@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:13 by mikuiper      #+#    #+#                 */
-/*   Updated: 2023/12/29 23:06:15 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/18 16:55:35 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,53 +110,59 @@ int isLeapYear(int year)														// Required because leap years have extra 
     }
 }
 
+
+
+#include <list> // Include the list header
 int BitcoinExchange::isDateValid(const std::string& date) const
 {
-    std::vector<std::string>	date_vector;
-    std::istringstream			iss_date(date);
-    std::string					date_part;
+    std::list<std::string> date_list; // Use std::list instead of std::vector
+    std::istringstream iss_date(date);
+    std::string date_part;
     
-    while (std::getline(iss_date, date_part, '-'))								// Split the input string on '-'
-
+    while (std::getline(iss_date, date_part, '-')) // Split the input string on '-'
     {
-        date_vector.push_back(date_part);
+        date_list.push_back(date_part); // Push each part into the list
     }
 
-    if (date_vector.size() != 3)												// Check if there are exactly 3 parts (year, month, day)
+    if (date_list.size() != 3) // Check if there are exactly 3 parts (year, month, day)
     {
-        return (0);																// If not, the date format is invalid
+        return 0; // If not, the date format is invalid
     }
 
     // Convert the parts to integers using atoi
-    int	year = std::atoi(date_vector[0].c_str());
-    int	month = std::atoi(date_vector[1].c_str());
-    int	day = std::atoi(date_vector[2].c_str());
+    int year = std::atoi(date_list.front().c_str());
+    date_list.pop_front(); // Remove the year from the list
+    int month = std::atoi(date_list.front().c_str());
+    date_list.pop_front(); // Remove the month from the list
+    int day = std::atoi(date_list.front().c_str());
 
-    if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31)				// Check date unit ranges
+    if (year < 0 || month < 1 || month > 12 || day < 1 || day > 31) // Check date unit ranges
     {
-        return (0);
+        return 0;
     }
 
-    if (month == 4 || month == 6 || month == 9 || month == 11)					// Check for months with 30 days
+    if (month == 4 || month == 6 || month == 9 || month == 11) // Check for months with 30 days
     {
         if (day > 30)
         {
-            return (0);
+            return 0;
         }
     }
-    else if (month == 2)														// Exception case for February
+    else if (month == 2) // Exception case for February
     {
-        if ((!isLeapYear(year)) && (day > 28))									// If not leap year February can have at most 28 days
+        if ((!isLeapYear(year)) && (day > 28)) // If not leap year February can have at most 28 days
         {
-            return (0);
+            return 0;
         }
-        else if ((isLeapYear(year)) && (day > 29))								// If leap year February can have at most 29 days
+        else if ((isLeapYear(year)) && (day > 29)) // If leap year February can have at most 29 days
         {
-            return (0);
+            return 0;
         }
     }
-    return 1;																	// If all conditions are met, the date is valid
+    return 1; // If all conditions are met, the date is valid
 }
+
+
 
 float BitcoinExchange::getExchangeRate(const std::string& date, float value) const
 {
