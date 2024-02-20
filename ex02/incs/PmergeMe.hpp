@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/20 17:44:29 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ public:
 	static void insertSortDeque(std::deque<int> &container, int start, int end);
 
 	// Utility functions
-	static void print(std::vector<int> &, std::deque<int> &);
+	void printVector(const std::vector<int> &vectorContainer, bool isBefore);
+	void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
 	static void wrapper(std::vector<int> &, std::deque<int> &, uint &, uint &);
 	static int findSplitIndex(int start, int end);
 	static int jacobsthal(int n);

@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/20 17:49:42 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,45 +35,62 @@ https://en.wikipedia.org/wiki/Merge-insertion_sort
 #include <deque>
 #include <sstream>
 
+
 int main(int argc, char **argv)
 {
 	try
 	{
 		if (argc < 2)
 		{
-			throw ": Enter args";
+			throw ": Enter a list of numbers, separated by spaces";
 		}
 		// Initialize containers
-		std::vector<int> vectorContainer;
-		std::deque<int> dequeContainer;
-		uint vectorSortingTime;
-		uint dequeSortingTime;
-		int number;
+		std::vector<int>	vectorContainer;
+		std::deque<int>		dequeContainer;
+		uint				vectorSortingTime;
+		uint				dequeSortingTime;
+		int					currentNumber;
 
 		// Populate containers from command line arguments
 		for (int index = 1; index < argc; index++)
 		{
-			std::stringstream readstring(argv[index]);
-			if (!(readstring >> number) || !(readstring.eof()))
+			std::stringstream userInput(argv[index]);
+			if (!(userInput >> currentNumber) || !(userInput.eof()))
 			{
-				throw "";
+				throw ("Invalid input format. Please provide integer arguments only.");
 			}
-			if (number < 0)
+			if (currentNumber < 0)
 			{
-				throw ": Negative number !";
+				throw (": Negative number detected!");
 			}
-			vectorContainer.push_back(number);
-			dequeContainer.push_back(number);
+			vectorContainer.push_back(currentNumber);
+			dequeContainer.push_back(currentNumber);
 		}
 
-		// Print initial state
-		PmergeMe::print(vectorContainer, dequeContainer);
+		// Create an object of PmergeMe class
+		PmergeMe merger;
 
-		// Calculate sorting time
-		PmergeMe::wrapper(vectorContainer, dequeContainer, vectorSortingTime, dequeSortingTime);
+		// Print initial state
+		merger.printVector(vectorContainer, true); // Print vector before sorting
+		merger.printDeque(dequeContainer, true);   // Print deque before sorting
+
+		// Calculate sorting time for vector
+		std::clock_t start = std::clock();
+		merger.fordJohnsonVector(vectorContainer, 0, vectorContainer.size() - 1);
+		std::clock_t end = std::clock();
+		double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+		vectorSortingTime = elapsed;
+
+		// Calculate sorting time for deque
+		start = std::clock();
+		merger.fordJohnsonDeque(dequeContainer, 0, dequeContainer.size() - 1);
+		end = std::clock();
+		elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+		dequeSortingTime = elapsed;
 
 		// Print sorted state and sorting times
-		PmergeMe::print(vectorContainer, dequeContainer);
+		merger.printVector(vectorContainer, false); // Print vector after sorting
+		merger.printDeque(dequeContainer, false);   // Print deque after sorting
 		std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << vectorSortingTime << " us" << std::endl;
 		std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque :  " << dequeSortingTime << " us" << std::endl;
 	}
@@ -83,3 +100,4 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
+

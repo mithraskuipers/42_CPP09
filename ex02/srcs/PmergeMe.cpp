@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/20 17:43:27 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ PmergeMe::~PmergeMe()
 void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
 {
     std::clock_t start = std::clock();
-    fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1); // Call sorting directly
+    fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1);
     std::clock_t end = std::clock();
     double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
     vecTime = elapsed;
     
     start = std::clock();
-    fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1); // Call sorting directly
+    fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1);
     end = std::clock();
     elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
     deqTime = elapsed;
@@ -246,39 +246,30 @@ int PmergeMe::jacobsthal(int n)
 	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
 }
 
-void PmergeMe::print(std::vector<int> &vectorContainer, std::deque<int> &dequeContainer)
-{
-	static int i = 0;
-
-	if (!i)
-	{
-		std::cout << "Vector before: " << std::endl;
-	}
-	else
-	{
-		std::cout << "Vector after: " << std::endl;
-	}
-	typedef typename std::vector<int>::const_iterator Viterator;
-	for (Viterator vectorIteratior = vectorContainer.begin(); vectorIteratior != vectorContainer.end(); ++vectorIteratior)
-	{
-		std::cout << *vectorIteratior << " ";
-	}
-	std::cout << std::endl;
-
-	if (!i)
-	{
-		std::cout << "Deque before: " << std::endl;
-	}
-	else
-		std::cout << "Deque after: " << std::endl;
-	typedef typename std::deque<int>::const_iterator Diterator;
-	for (Diterator dequeIterator = dequeContainer.begin(); dequeIterator != dequeContainer.end(); ++dequeIterator)
-	{
-		std::cout << *dequeIterator << " ";
-	}
-	std::cout << std::endl;
-	i++;
+void PmergeMe::printVector(const std::vector<int> &vectorContainer, bool isBefore) {
+    if (isBefore) {
+        std::cout << "Vector before sorting: ";
+    } else {
+        std::cout << "Vector after sorting: ";
+    }
+    for (const auto &element : vectorContainer) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
 }
+
+void PmergeMe::printDeque(const std::deque<int> &dequeContainer, bool isBefore) {
+    if (isBefore) {
+        std::cout << "Deque before sorting: ";
+    } else {
+        std::cout << "Deque after sorting: ";
+    }
+    for (const auto &element : dequeContainer) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
 
 // Commented out operator = overload since there is nothing to copy over.
 // PmergeMe &PmergeMe::operator=(const PmergeMe &other)
