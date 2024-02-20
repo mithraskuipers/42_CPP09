@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/18 17:20:33 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/20 11:58:05 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ int main(int argc, char **argv)
 			throw ": Enter args";
 
 		// Initialize containers
-		std::vector<int> Vec;
-		std::deque<int> Deq;
+		std::vector<int> vectorContainer;
+		std::deque<int> dequeContainer;
 		double vectorSortingTime;
 		double dequeSortingTime;
 		int number;
@@ -61,18 +61,18 @@ int main(int argc, char **argv)
 			{
 				throw ": Negative number !";
 			}
-			Vec.push_back(number);
-			Deq.push_back(number);
+			vectorContainer.push_back(number);
+			dequeContainer.push_back(number);
 		}
 
 		// Print initial state
-		PmergeMe::print(Vec, Deq);
+		PmergeMe::print(vectorContainer, dequeContainer);
 
 		// Calculate sorting time
-		PmergeMe::trackTime(Vec, Deq, vectorSortingTime, dequeSortingTime);
+		PmergeMe::trackTime(vectorContainer, dequeContainer, vectorSortingTime, dequeSortingTime);
 
 		// Print sorted state and sorting times
-		PmergeMe::print(Vec, Deq);
+		PmergeMe::print(vectorContainer, dequeContainer);
 		std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << vectorSortingTime << " us" << std::endl;
 		std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque :  " << dequeSortingTime << " us" << std::endl;
 	}
@@ -80,6 +80,5 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Error " << errorMsg << std::endl;
 	}
-
 	return 0;
 }
