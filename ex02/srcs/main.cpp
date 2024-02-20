@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 11:58:05 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ int main(int argc, char **argv)
 	try
 	{
 		if (argc < 2)
+		{
 			throw ": Enter args";
-
+		}
 		// Initialize containers
 		std::vector<int> vectorContainer;
 		std::deque<int> dequeContainer;
-		double vectorSortingTime;
-		double dequeSortingTime;
+		uint vectorSortingTime;
+		uint dequeSortingTime;
 		int number;
 
 		// Populate containers from command line arguments
@@ -69,7 +70,7 @@ int main(int argc, char **argv)
 		PmergeMe::print(vectorContainer, dequeContainer);
 
 		// Calculate sorting time
-		PmergeMe::trackTime(vectorContainer, dequeContainer, vectorSortingTime, dequeSortingTime);
+		PmergeMe::wrapper(vectorContainer, dequeContainer, vectorSortingTime, dequeSortingTime);
 
 		// Print sorted state and sorting times
 		PmergeMe::print(vectorContainer, dequeContainer);

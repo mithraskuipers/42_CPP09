@@ -1,5 +1,17 @@
-#ifndef P_HPP
-#define P_HPP
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   PmergeMe.hpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
+/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PMERGEME_HPP
+#define PMERGEME_HPP
 
 #include <algorithm>
 #include <iostream>
@@ -30,16 +42,11 @@ public:
 	static void mergeSortDeque(std::deque<int> &container, int start, int mid, int end);
 	static void insertSortDeque(std::deque<int> &container, int start, int end);
 
-	// Calculate time functions
-	static void runVector(std::vector<int> &container);
-	static void runDeque(std::deque<int> &container);
-
 	// Utility functions
 	static void print(std::vector<int> &, std::deque<int> &);
-	static void trackTime(std::vector<int> &, std::deque<int> &, double &, double &);
+	static void wrapper(std::vector<int> &, std::deque<int> &, uint &, uint &);
 	static int findSplitIndex(int start, int end);
+	static int jacobsthal(int n);
 };
-
-int jacobsthal(int n);
 
 #endif

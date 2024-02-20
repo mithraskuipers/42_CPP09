@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   PmergeMe.cpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
+/*   Updated: 2024/02/20 15:08:05 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../incs/PmergeMe.hpp"
 
 PmergeMe::PmergeMe()
@@ -8,29 +20,25 @@ PmergeMe::~PmergeMe()
 {
 }
 
-PmergeMe &PmergeMe::operator=(const PmergeMe &other)
+// *****************************************************************************
+// Program wrapper
+// *****************************************************************************
+
+void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
 {
-	if (this == &other)
-	{
-		return *this;
-	}
-	return *this;
+    std::clock_t start = std::clock();
+    fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1); // Call sorting directly
+    std::clock_t end = std::clock();
+    double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+    vecTime = elapsed;
+    
+    start = std::clock();
+    fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1); // Call sorting directly
+    end = std::clock();
+    elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+    deqTime = elapsed;
 }
 
-PmergeMe::PmergeMe(const PmergeMe &other)
-{
-	(void)(other);
-}
-
-// Helper function to calculate Jacobsthal number
-int jacobsthal(int n)
-{
-	if (n == 0)
-		return 0;
-	if (n == 1)
-		return 1;
-	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
-}
 
 // *****************************************************************************
 // Vector
@@ -153,16 +161,6 @@ void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
 	}
 }
 
-void PmergeMe::runVector(std::vector<int> &container)
-{
-	fordJohnsonVector(container, 0, container.size() - 1);
-}
-
-void PmergeMe::runDeque(std::deque<int> &container)
-{
-	fordJohnsonDeque(container, 0, container.size() - 1);
-}
-
 // *****************************************************************************
 // Deque
 // *****************************************************************************
@@ -234,18 +232,18 @@ void PmergeMe::mergeSortDeque(std::deque<int> &container, int start, int mid, in
 	}
 }
 
-void PmergeMe::trackTime(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, double &vecTime, double &deqTime)
+// *****************************************************************************
+// Misc
+// *****************************************************************************
+
+// Calculate Jacobsthal number
+int PmergeMe::jacobsthal(int n)
 {
-	std::clock_t start = std::clock();
-	PmergeMe::runVector(Vcontainer);
-	std::clock_t end = std::clock();
-	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	vecTime = elapsed;
-	start = std::clock();
-	PmergeMe::runDeque(Dcontainer);
-	end = std::clock();
-	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	deqTime = elapsed;
+	if (n == 0)
+		return 0;
+	if (n == 1)
+		return 1;
+	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
 }
 
 void PmergeMe::print(std::vector<int> &vectorContainer, std::deque<int> &dequeContainer)
@@ -281,3 +279,19 @@ void PmergeMe::print(std::vector<int> &vectorContainer, std::deque<int> &dequeCo
 	std::cout << std::endl;
 	i++;
 }
+
+// Commented out operator = overload since there is nothing to copy over.
+// PmergeMe &PmergeMe::operator=(const PmergeMe &other)
+// {
+// 	if (this == &other)
+// 	{
+// 		return (*this);
+// 	}
+// 	return (*this);
+// }
+
+// Commented out custom copy constructor since there is nothing to copy over.
+// PmergeMe::PmergeMe(const PmergeMe &other)
+// {
+// 	(void)(other);
+// }
