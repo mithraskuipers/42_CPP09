@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 15:59:51 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/15 14:47:29 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/22 17:54:55 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,12 @@ public:
 	RPN &operator=(const RPN &a);
 	void processExpression(std::string input);
 	int calculate(int leftNumber, int rightNumber, char o);
+	void printStack(const std::stack<int>& stackToPrint) const;
+
 	bool debugMode;
 
 private:
-	std::stack<int> _outcome;
+	std::stack<int> _stack;
 };
 
 #endif

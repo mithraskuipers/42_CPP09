@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:17 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/21 10:57:58 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/22 17:20:08 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ bool isValidDate(const std::string &date)
 	if (date.length() != 10) // Check if date has exactly 10 characters (YYYY-MM-DD).
 		return false;
 
-	for (size_t i = 0; i < date.length(); ++i)
+	for (size_t i = 0; i < date.length(); i++)
 	{
 		char ch = date[i];
 		if (i == 4 || i == 7)
@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 	std::string btcExchangeRatesFile = "data.csv";
 	BitcoinExchange exchange(btcExchangeRatesFile);
 	std::string line;
-	bool firstLine = true;
+	bool firstLine;
+	firstLine = true;
 
 	while (std::getline(inputFile, line))
 	{
@@ -79,7 +80,7 @@ int main(int argc, char **argv)
 
 		if (!(ss_line >> ss_date >> separator >> ss_value) || separator != '|' || !isValidDate(ss_date))
 		{
-			std::cerr << "Error: Line does not match the expected format => " << line << std::endl;
+			std::cerr << "Error: bad input => " << line << std::endl;
 			continue;
 		}
 

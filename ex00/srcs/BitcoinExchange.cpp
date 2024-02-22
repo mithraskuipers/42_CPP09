@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/16 17:07:13 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/21 10:58:49 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/22 17:02:28 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int isLeapYear(int year) // Required because leap years have extra day in Februa
 #include <list> // Include the list header
 int BitcoinExchange::isDateValid(const std::string &date) const
 {
-	std::list<std::string> date_list; // Use std::list instead of std::vector
+	std::list<std::string> date_list;
 	std::istringstream iss_date(date);
 	std::string date_part;
 

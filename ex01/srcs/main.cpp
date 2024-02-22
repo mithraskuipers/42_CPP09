@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/15 15:03:14 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/22 17:58:25 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ int main(int argc, char *argv[])
 		std::cerr << "Usage: " << argv[0] << " <expression>\n";
 		return 1;
 	}
-
 	try
 	{
 		RPN calculator;
@@ -36,7 +35,6 @@ int main(int argc, char *argv[])
 		std::cerr << "Error: " << e.what();
 		return 1;
 	}
-
 	return 0;
 }
 

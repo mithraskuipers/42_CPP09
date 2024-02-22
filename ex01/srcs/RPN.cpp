@@ -6,9 +6,9 @@ RPN::RPN()
 }
 
 // Copy constructor
-RPN::RPN(const RPN &a)
+RPN::RPN(const RPN &other)
 {
-	this->_outcome = a._outcome; // Copy the stack from 'a' to the current object
+	this->_stack = other._stack; // Copy the stack from 'other' to the current object
 }
 
 // Destructor
@@ -17,13 +17,13 @@ RPN::~RPN()
 }
 
 // Assignment operator
-RPN &RPN::operator=(const RPN &a)
+RPN &RPN::operator=(const RPN &other)
 {
-	if (this != &a) // Check for self-assignment
+	if (this != &other) // Check for self-assignment
 	{
-		this->_outcome = a._outcome; // Copy the stack from 'a' to the current object
+		this->_stack = other._stack; // Copy the stack from 'other' to the current object
 	}
-	return *this;
+	return (*this);
 }
 
 // Perform arithmetic operations based on operators
@@ -73,9 +73,12 @@ void RPN::processExpression(std::string input)
 			// Increment the number count
 			n_operands++;
 			// Convert the character to an integer and push it onto the stack
-			this->_outcome.push(input[i] - '0');
+			this->_stack.push(input[i] - '0');
 			if (debugMode)
+			{
 				std::cout << "Pushed operand: " << input[i] - '0' << std::endl;
+				printStack(this->_stack);
+			}
 		}
 		// If the current character is an arithmetic operator
 		else if (operator_set.find(input[i]) != std::string::npos)
@@ -83,20 +86,20 @@ void RPN::processExpression(std::string input)
 			// Increment the operator count
 			n_operators++;
 			// Check if the stack has at least two operands to perform the operation
-			if (_outcome.size() < 2)
+			if (_stack.size() < 2)
 			{
 				throw std::invalid_argument("Not enough operands for operator\n");
 			}
 			// Pop (retrieve and remove) the top two numbers from the stack and perform the calculation
-			int leftNumber = _outcome.top();
-			_outcome.pop();
-			int rightNumber = _outcome.top(); // Peek the top number for printing
+			int leftNumber = _stack.top();
+			_stack.pop();
+			int rightNumber = _stack.top(); // Peek the top number for printing
 			if (debugMode)
 				std::cout << "Popped operands: " << leftNumber << " and " << rightNumber << std::endl;
 			int result = calculate(leftNumber, rightNumber, input[i]);
 			if (debugMode)
 				std::cout << "Applied operator: " << input[i] << " to " << rightNumber << " and " << leftNumber << ", Result: " << result << std::endl;
-			_outcome.top() = result;
+			_stack.top() = result;
 		}
 		// If the current character is a space, skip it
 		else if (isspace(input[i]))
@@ -116,5 +119,23 @@ void RPN::processExpression(std::string input)
 	}
 
 	// Output the final result
-	std::cout << _outcome.top() << "\n";
+	std::cout << _stack.top() << "\n";
+}
+
+#include "RPN.hpp"
+
+// Function to print the contents of a stack
+void RPN::printStack(const std::stack<int>& stackToPrint) const
+{
+    std::stack<int> tempStack = stackToPrint; // Create a temporary stack to preserve the original stack
+    std::cout << "Stack contents: ";
+    
+    // Iterate through the stack and print each element
+    while (!tempStack.empty())
+    {
+        std::cout << tempStack.top() << " ";
+        tempStack.pop(); // Pop the top element to move to the next one
+    }
+    
+    std::cout << std::endl;
 }
