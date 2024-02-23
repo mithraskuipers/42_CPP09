@@ -1,14 +1,4 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        ::::::::            */
-/*   PmergeMe.hpp                                       :+:    :+:            */
-/*                                                     +:+                    */
-/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
-/*                                                   +#+                      */
-/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 17:44:29 by mikuiper      ########   odam.nl         */
-/*                                                                            */
-/* ************************************************************************** */
+// PmergeMe.hpp
 
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
@@ -21,33 +11,37 @@
 #include <sstream>
 #include <cstddef>
 
-#define START(x) x + 1
+#define VERBOSEMODE 1
 
 class PmergeMe
 {
 public:
-	// Orthodox Canonical Form
-	PmergeMe();
-	~PmergeMe();
-	PmergeMe &operator=(const PmergeMe &other);
-	PmergeMe(const PmergeMe &other);
+    // Constructor and Destructor
+    PmergeMe();
+    ~PmergeMe();
 
-	// Vector sort functions
-	static void fordJohnsonVector(std::vector<int> &container, int start, int end);
-	static void mergeSortVector(std::vector<int> &container, int start, int mid, int end);
-	static void insertSortVector(std::vector<int> &container, int start, int end);
+    // Methods to handle odd elements
+    void handleOddElements(std::vector<int> &container);
+    void handleOddElements(std::deque<int> &container);
 
-	// Deque sort functions
-	static void fordJohnsonDeque(std::deque<int> &container, int start, int end);
-	static void mergeSortDeque(std::deque<int> &container, int start, int mid, int end);
-	static void insertSortDeque(std::deque<int> &container, int start, int end);
+    // Wrapper method
+    void wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime);
 
-	// Utility functions
-	void printVector(const std::vector<int> &vectorContainer, bool isBefore);
-	void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
-	static void wrapper(std::vector<int> &, std::deque<int> &, uint &, uint &);
-	static int findSplitIndex(int start, int end);
-	static int jacobsthal(int n);
+    // Vector sorting methods
+    void fordJohnsonVector(std::vector<int> &container, int start, int end);
+    void mergeSortVector(std::vector<int> &container, int start, int mid, int end);
+    void insertSortVector(std::vector<int> &container, int start, int end);
+
+    // Deque sorting methods
+    void fordJohnsonDeque(std::deque<int> &container, int start, int end);
+    void mergeSortDeque(std::deque<int> &container, int start, int mid, int end);
+    void insertSortDeque(std::deque<int> &container, int start, int end);
+
+    // Utility methods
+    void printVector(const std::vector<int> &vectorContainer, bool isBefore);
+    void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
+    static int jacobsthal(int n);
+
 };
 
 #endif

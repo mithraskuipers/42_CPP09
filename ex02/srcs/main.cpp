@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 17:53:42 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/23 20:52:39 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ int main(int argc, char **argv)
 			vectorContainer.push_back(currentNumber);
 			dequeContainer.push_back(currentNumber);
 		}
+
 
 		// Print initial state
 		merger.printVector(vectorContainer, true);

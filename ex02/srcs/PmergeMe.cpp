@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/20 17:43:27 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/23 20:55:33 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,46 +20,79 @@ PmergeMe::~PmergeMe()
 {
 }
 
-// *****************************************************************************
-// Program wrapper
-// *****************************************************************************
+void PmergeMe::handleOddElements(std::vector<int> &container)
+{
+	int lastElement = container.back();
+	container.pop_back();
+	insertSortVector(container, 0, container.size() - 1);
+	container.push_back(lastElement);
+}
+
+void PmergeMe::handleOddElements(std::deque<int> &container)
+{
+	int lastElement = container.back();
+	container.pop_back();
+	insertSortDeque(container, 0, container.size() - 1);
+	container.push_back(lastElement);
+}
 
 void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
 {
-    std::clock_t start = std::clock();
-    fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1);
-    std::clock_t end = std::clock();
-    double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-    vecTime = elapsed;
-    
-    start = std::clock();
-    fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1);
-    end = std::clock();
-    elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-    deqTime = elapsed;
+	std::clock_t start = std::clock();
+	PmergeMe merger; // Create an instance of the PmergeMe class
+	if (Vcontainer.size() % 2 != 0)
+	{
+		merger.handleOddElements(Vcontainer); // Call using object instance
+	}
+	merger.fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1);
+	std::clock_t end = std::clock();
+	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+	vecTime = elapsed;
+
+	start = std::clock();
+	if (Dcontainer.size() % 2 != 0)
+	{
+		merger.handleOddElements(Dcontainer); // Call using object instance
+	}
+	merger.fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1);
+	end = std::clock();
+	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+	deqTime = elapsed;
 }
-
-
-// *****************************************************************************
-// Vector
-// *****************************************************************************
 
 void PmergeMe::fordJohnsonVector(std::vector<int> &container, int start, int end)
 {
 	int newEnd;
 	if (start < end)
 	{
-		if ((end - start) < 10)
+		newEnd = start + (end - start) / 2;
+		fordJohnsonVector(container, start, newEnd);
+		fordJohnsonVector(container, newEnd + 1, end);
+		mergeSortVector(container, start, newEnd, end);
+	}
+}
+
+void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
+{
+	int n = end - start + 1; // Number of elements to sort
+
+	for (int i = 1; i < n; i++)
+	{
+		int key = container[start + i];
+		int j = i - 1;
+
+		// Find position to insert based on Jacobsthal numbers
+		while (j >= 0 && container[start + j] > key)
 		{
-			insertSortVector(container, start, end);
+			if (j >= 0 && j == jacobsthal(i) - 2)
+			{
+				container[start + j + 1] = container[start + j];
+				j--;
+			}
+			container[start + j + 1] = container[start + j];
+			j--;
 		}
-		else
-		{
-			newEnd = start + (end - start) / 2;
-			fordJohnsonVector(container, start, newEnd);
-			fordJohnsonVector(container, START(newEnd), end);
-			mergeSortVector(container, start, newEnd, end);
-		}
+		container[start + j + 1] = key;
 	}
 }
 
@@ -108,77 +141,6 @@ void PmergeMe::mergeSortVector(std::vector<int> &container, int start, int mid, 
 		container[k] = right[j];
 		k++;
 		j++;
-	}
-}
-
-void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
-{
-	int n = end - start + 1; // Number of elements to sort
-
-	for (int i = 1; i < n; i++)
-	{
-		int key = container[start + i];
-		int j = i - 1;
-
-		// Find position to insert based on Jacobsthal numbers
-		while (j >= 0 && container[start + j] > key)
-		{
-			// Adjust the condition to consider Jacobsthal numbers
-			if (j >= 0 && j == jacobsthal(i) - 2)
-			{
-				container[start + j + 1] = container[start + j]; // Shift element to the right
-				j--;											 // Decrement j again for correct placement
-			}
-			container[start + j + 1] = container[start + j]; // Shift element to the right
-			j--;
-		}
-		container[start + j + 1] = key; // Insert key in the correct position
-	}
-}
-
-void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
-{
-	int n = end - start + 1; // Number of elements to sort
-
-	for (int i = 1; i < n; i++)
-	{
-		int key = container[start + i];
-		int j = i - 1;
-
-		// Find position to insert based on Jacobsthal numbers
-		while (j >= 0 && container[start + j] > key)
-		{
-			// Adjust the condition to consider Jacobsthal numbers
-			if (j >= 0 && j == jacobsthal(i) - 2)
-			{
-				container[start + j + 1] = container[start + j]; // Shift element to the right
-				j--;											 // Decrement j again for correct placement
-			}
-			container[start + j + 1] = container[start + j]; // Shift element to the right
-			j--;
-		}
-		container[start + j + 1] = key; // Insert key in the correct position
-	}
-}
-
-// *****************************************************************************
-// Deque
-// *****************************************************************************
-
-void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end)
-{
-	int newEnd;
-	if (start < end)
-	{
-		if ((end - start) < 10)
-			insertSortDeque(container, start, end);
-		else
-		{
-			newEnd = start + (end - start) / 2;
-			fordJohnsonDeque(container, start, newEnd);
-			fordJohnsonDeque(container, START(newEnd), end);
-			mergeSortDeque(container, start, newEnd, end);
-		}
 	}
 }
 
@@ -232,11 +194,42 @@ void PmergeMe::mergeSortDeque(std::deque<int> &container, int start, int mid, in
 	}
 }
 
-// *****************************************************************************
-// Misc
-// *****************************************************************************
+void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end)
+{
+	int newEnd;
+	if (start < end)
+	{
+		newEnd = start + (end - start) / 2;
+		fordJohnsonDeque(container, start, newEnd);
+		fordJohnsonDeque(container, newEnd + 1, end);
+		mergeSortDeque(container, start, newEnd, end);
+	}
+}
 
-// Calculate Jacobsthal number
+void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
+{
+	int n = end - start + 1; // Number of elements to sort
+
+	for (int i = 1; i < n; i++)
+	{
+		int key = container[start + i];
+		int j = i - 1;
+
+		// Find position to insert based on Jacobsthal numbers
+		while (j >= 0 && container[start + j] > key)
+		{
+			if (j >= 0 && j == jacobsthal(i) - 2)
+			{
+				container[start + j + 1] = container[start + j];
+				j--;
+			}
+			container[start + j + 1] = container[start + j];
+			j--;
+		}
+		container[start + j + 1] = key;
+	}
+}
+
 int PmergeMe::jacobsthal(int n)
 {
 	if (n == 0)
@@ -246,43 +239,36 @@ int PmergeMe::jacobsthal(int n)
 	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
 }
 
-void PmergeMe::printVector(const std::vector<int> &vectorContainer, bool isBefore) {
-    if (isBefore) {
-        std::cout << "Vector before sorting: ";
-    } else {
-        std::cout << "Vector after sorting: ";
-    }
-    for (const auto &element : vectorContainer) {
-        std::cout << element << " ";
-    }
-    std::cout << std::endl;
+void PmergeMe::printVector(const std::vector<int> &vectorContainer, bool isBefore)
+{
+	if (isBefore)
+	{
+		std::cout << "Vector before sorting: ";
+	}
+	else
+	{
+		std::cout << "Vector after sorting: ";
+	}
+	for (const auto &element : vectorContainer)
+	{
+		std::cout << element << " ";
+	}
+	std::cout << std::endl;
 }
 
-void PmergeMe::printDeque(const std::deque<int> &dequeContainer, bool isBefore) {
-    if (isBefore) {
-        std::cout << "Deque before sorting: ";
-    } else {
-        std::cout << "Deque after sorting: ";
-    }
-    for (const auto &element : dequeContainer) {
-        std::cout << element << " ";
-    }
-    std::cout << std::endl;
+void PmergeMe::printDeque(const std::deque<int> &dequeContainer, bool isBefore)
+{
+	if (isBefore)
+	{
+		std::cout << "Deque before sorting: ";
+	}
+	else
+	{
+		std::cout << "Deque after sorting: ";
+	}
+	for (const auto &element : dequeContainer)
+	{
+		std::cout << element << " ";
+	}
+	std::cout << std::endl;
 }
-
-
-// Commented out operator = overload since there is nothing to copy over.
-// PmergeMe &PmergeMe::operator=(const PmergeMe &other)
-// {
-// 	if (this == &other)
-// 	{
-// 		return (*this);
-// 	}
-// 	return (*this);
-// }
-
-// Commented out custom copy constructor since there is nothing to copy over.
-// PmergeMe::PmergeMe(const PmergeMe &other)
-// {
-// 	(void)(other);
-// }
