@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/23 20:52:39 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/23 21:06:33 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ make re ; ./PmergeMe 4 1 3 2 8 ;
 /*
 SOURCE:
 https://en.wikipedia.org/wiki/Merge-insertion_sort
+https://codereview.stackexchange.com/questions/116367/ford-johnson-merge-insertion-sort
 */
 
 #include "../incs/PmergeMe.hpp"

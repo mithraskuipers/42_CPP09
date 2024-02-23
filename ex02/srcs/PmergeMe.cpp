@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/23 20:55:33 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/02/23 21:15:41 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,39 +36,25 @@ void PmergeMe::handleOddElements(std::deque<int> &container)
 	container.push_back(lastElement);
 }
 
-void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
+void PmergeMe::pairwiseSortVector(std::vector<int> &container)
 {
-	std::clock_t start = std::clock();
-	PmergeMe merger; // Create an instance of the PmergeMe class
-	if (Vcontainer.size() % 2 != 0)
+	for (size_t i = 0; i < container.size() - 1; i += 2)
 	{
-		merger.handleOddElements(Vcontainer); // Call using object instance
+		if (container[i] > container[i + 1])
+		{
+			std::swap(container[i], container[i + 1]);
+		}
 	}
-	merger.fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1);
-	std::clock_t end = std::clock();
-	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	vecTime = elapsed;
-
-	start = std::clock();
-	if (Dcontainer.size() % 2 != 0)
-	{
-		merger.handleOddElements(Dcontainer); // Call using object instance
-	}
-	merger.fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1);
-	end = std::clock();
-	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	deqTime = elapsed;
 }
 
-void PmergeMe::fordJohnsonVector(std::vector<int> &container, int start, int end)
+void PmergeMe::pairwiseSortDeque(std::deque<int> &container)
 {
-	int newEnd;
-	if (start < end)
+	for (size_t i = 0; i < container.size() - 1; i += 2)
 	{
-		newEnd = start + (end - start) / 2;
-		fordJohnsonVector(container, start, newEnd);
-		fordJohnsonVector(container, newEnd + 1, end);
-		mergeSortVector(container, start, newEnd, end);
+		if (container[i] > container[i + 1])
+		{
+			std::swap(container[i], container[i + 1]);
+		}
 	}
 }
 
@@ -103,11 +89,11 @@ void PmergeMe::mergeSortVector(std::vector<int> &container, int start, int mid, 
 	std::vector<int> left(mid - start + 1);
 	std::vector<int> right(end - mid);
 
-	for (i = 0; i < (mid - start + 1); ++i)
+	for (i = 0; i < (mid - start + 1); i++)
 	{
 		left[i] = container[start + i];
 	}
-	for (j = 0; j < (end - mid); ++j)
+	for (j = 0; j < (end - mid); j++)
 	{
 		right[j] = container[mid + 1 + j];
 	}
@@ -153,11 +139,11 @@ void PmergeMe::mergeSortDeque(std::deque<int> &container, int start, int mid, in
 	std::deque<int> left(mid - start + 1);
 	std::deque<int> right(end - mid);
 
-	for (i = 0; i < (mid - start + 1); ++i)
+	for (i = 0; i < (mid - start + 1); i++)
 	{
 		left[i] = container[start + i];
 	}
-	for (j = 0; j < (end - mid); ++j)
+	for (j = 0; j < (end - mid); j++)
 	{
 		right[j] = container[mid + 1 + j];
 	}
@@ -194,15 +180,127 @@ void PmergeMe::mergeSortDeque(std::deque<int> &container, int start, int mid, in
 	}
 }
 
-void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end)
+void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
 {
-	int newEnd;
+	std::clock_t start = std::clock();
+	PmergeMe merger; // Create an instance of the PmergeMe class
+	if (Vcontainer.size() % 2 != 0)
+	{
+		merger.handleOddElements(Vcontainer); // Call using object instance
+	}
+	fordJohnsonVector(Vcontainer, 0, Vcontainer.size() - 1); // Update to use Ford-Johnson algorithm
+	std::clock_t end = std::clock();
+	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+	vecTime = elapsed;
+
+	start = std::clock();
+	if (Dcontainer.size() % 2 != 0)
+	{
+		merger.handleOddElements(Dcontainer); // Call using object instance
+	}
+	fordJohnsonDeque(Dcontainer, 0, Dcontainer.size() - 1); // Update to use Ford-Johnson algorithm
+	end = std::clock();
+	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+	deqTime = elapsed;
+}
+
+// void PmergeMe::fordJohnsonVector(std::vector<int> &container, int start, int end) {
+//     if (start < end) {
+//         int newEnd = start + (end - start) / 2;
+//         fordJohnsonVector(container, start, newEnd);
+//         fordJohnsonVector(container, newEnd + 1, end);
+//         mergeSortVector(container, start, newEnd, end);
+//     }
+// }
+
+// void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end) {
+//     if (start < end) {
+//         int newEnd = start + (end - start) / 2;
+//         fordJohnsonDeque(container, start, newEnd);
+//         fordJohnsonDeque(container, newEnd + 1, end);
+//         mergeSortDeque(container, start, newEnd, end);
+//     }
+// }
+
+void PmergeMe::fordJohnsonVector(std::vector<int> &container, int start, int end)
+{
 	if (start < end)
 	{
-		newEnd = start + (end - start) / 2;
+		int newEnd = start + (end - start) / 2;
+		fordJohnsonVector(container, start, newEnd);
+		fordJohnsonVector(container, newEnd + 1, end);
+		mergeSortVector(container, start, newEnd, end);
+		insertPendVector(container, start, newEnd, end); // Insert pend elements
+	}
+}
+
+void PmergeMe::fordJohnsonDeque(std::deque<int> &container, int start, int end)
+{
+	if (start < end)
+	{
+		int newEnd = start + (end - start) / 2;
 		fordJohnsonDeque(container, start, newEnd);
 		fordJohnsonDeque(container, newEnd + 1, end);
 		mergeSortDeque(container, start, newEnd, end);
+		insertPendDeque(container, start, newEnd, end); // Insert pend elements
+	}
+}
+
+void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid, int end)
+{
+	// Create a temporary vector to hold pend elements
+	std::vector<int> pendElements;
+
+	// Traverse the sorted main chain to find pend positions
+	size_t i = start;
+	size_t j = mid + 1;
+	while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
+	{
+		if (container[i] > container[j])
+		{
+			pendElements.push_back(container[j]);
+			j++;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	// Insert pend elements into the sorted main chain
+	size_t pendIndex = start;
+	for (int pendElement : pendElements)
+	{
+		container[pendIndex++] = pendElement;
+	}
+}
+
+void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, int end)
+{
+	// Create a temporary deque to hold pend elements
+	std::deque<int> pendElements;
+
+	// Traverse the sorted main chain to find pend positions
+	size_t i = start;
+	size_t j = mid + 1;
+	while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
+	{
+		if (container[i] > container[j])
+		{
+			pendElements.push_back(container[j]);
+			j++;
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+	// Insert pend elements into the sorted main chain
+	size_t pendIndex = start;
+	for (int pendElement : pendElements)
+	{
+		container[pendIndex++] = pendElement;
 	}
 }
 

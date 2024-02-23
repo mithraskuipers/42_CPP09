@@ -42,6 +42,12 @@ public:
     void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
     static int jacobsthal(int n);
 
+	void pairwiseSortVector(std::vector<int> &container);
+	void pairwiseSortDeque(std::deque<int> &container);
+
+	void insertPendVector(std::vector<int> &container, int start, int mid, int end);
+	void insertPendDeque(std::deque<int> &container, int start, int mid, int end);
+
 };
 
 #endif
