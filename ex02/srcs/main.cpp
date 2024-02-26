@@ -76,14 +76,14 @@ int main(int argc, char **argv)
 
 		// Calculate sorting time for vector
 		std::clock_t start = std::clock();
-		merger.fordJohnsonVector(vectorContainer, 0, vectorContainer.size() - 1);
+		merger.recursiveSortingVector(vectorContainer, 0, vectorContainer.size() - 1);
 		std::clock_t end = std::clock();
 		elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
 		vectorSortingTime = elapsed;
 
 		// Calculate sorting time for deque
 		start = std::clock();
-		merger.fordJohnsonDeque(dequeContainer, 0, dequeContainer.size() - 1);
+		merger.recursiveSortingDeque(dequeContainer, 0, dequeContainer.size() - 1);
 		end = std::clock();
 		elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
 		dequeSortingTime = elapsed;

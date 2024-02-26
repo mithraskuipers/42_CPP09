@@ -1,53 +1,52 @@
-// PmergeMe.hpp
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        ::::::::            */
+/*   PmergeMe.hpp                                       :+:    :+:            */
+/*                                                     +:+                    */
+/*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
+/*                                                   +#+                      */
+/*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
+/*   Updated: 2024/02/23 21:06:33 by mikuiper      ########   odam.nl         */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef PMERGEME_HPP
 #define PMERGEME_HPP
 
-#include <algorithm>
 #include <iostream>
-#include <deque>
 #include <vector>
+#include <deque>
 #include <ctime>
-#include <sstream>
-#include <cstddef>
-
-#define VERBOSEMODE 1
 
 class PmergeMe
 {
 public:
-    // Constructor and Destructor
     PmergeMe();
     ~PmergeMe();
 
-    // Methods to handle odd elements
+    void wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime);
+
+    void pairwiseSortVector(std::vector<int> &container);
+    void pairwiseSortDeque(std::deque<int> &container);
     void handleOddElements(std::vector<int> &container);
     void handleOddElements(std::deque<int> &container);
 
-    // Wrapper method
-    void wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime);
+    void recursiveSortingVector(std::vector<int> &container, int start, int end);
+    void recursiveSortingDeque(std::deque<int> &container, int start, int end);
 
-    // Vector sorting methods
-    void fordJohnsonVector(std::vector<int> &container, int start, int end);
-    void mergeSortVector(std::vector<int> &container, int start, int mid, int end);
+    void mergeSortedHalvesVector(std::vector<int> &container, int start, int mid, int end);
+    void mergeSortedHalvesDeque(std::deque<int> &container, int start, int mid, int end);
+
+    void insertPendVector(std::vector<int> &container, int start, int mid, int end);
+    void insertPendDeque(std::deque<int> &container, int start, int mid, int end);
+
+    void insertSortDeque(std::deque<int> &container, int start, int end);
     void insertSortVector(std::vector<int> &container, int start, int end);
 
-    // Deque sorting methods
-    void fordJohnsonDeque(std::deque<int> &container, int start, int end);
-    void mergeSortDeque(std::deque<int> &container, int start, int mid, int end);
-    void insertSortDeque(std::deque<int> &container, int start, int end);
-
-    // Utility methods
     void printVector(const std::vector<int> &vectorContainer, bool isBefore);
     void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
-    static int jacobsthal(int n);
 
-	void pairwiseSortVector(std::vector<int> &container);
-	void pairwiseSortDeque(std::deque<int> &container);
-
-	void insertPendVector(std::vector<int> &container, int start, int mid, int end);
-	void insertPendDeque(std::deque<int> &container, int start, int mid, int end);
-
+    int jacobsthal(int n);
 };
 
-#endif
+#endif /* !PMERGEME_HPP */
