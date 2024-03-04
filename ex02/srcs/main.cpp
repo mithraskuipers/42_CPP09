@@ -28,6 +28,7 @@ make re ; ./PmergeMe 4 1 3 2 8 ;
 SOURCE:
 https://en.wikipedia.org/wiki/Merge-insertion_sort
 https://codereview.stackexchange.com/questions/116367/ford-johnson-merge-insertion-sort
+https://www.programiz.com/cpp-programming/stl-containers
 */
 
 #include "../incs/PmergeMe.hpp"
@@ -68,7 +69,6 @@ int main(int argc, char **argv)
 			vectorContainer.push_back(currentNumber);
 			dequeContainer.push_back(currentNumber);
 		}
-
 
 		// Print initial state
 		merger.printVector(vectorContainer, true);

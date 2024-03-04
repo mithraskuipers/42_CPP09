@@ -47,6 +47,10 @@ public:
     void printDeque(const std::deque<int> &dequeContainer, bool isBefore);
 
     int jacobsthal(int n);
+
+    // For debugging
+    void printPendElementsVector(const std::vector<int> &pendElements);
+    void printPendElementsDeque(const std::deque<int> &pendElements);
 };
 
-#endif /* !PMERGEME_HPP */
+#endif

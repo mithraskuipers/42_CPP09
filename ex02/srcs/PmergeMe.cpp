@@ -112,14 +112,13 @@ void PmergeMe::handleOddElements(std::deque<int> &container)
 // Ford-Johnson algorithm for vector
 void PmergeMe::recursiveSortingVector(std::vector<int> &container, int start, int end)
 {
-
 	if (start < end) // splitting until individual elements are reached. If clause happens if there is more than 1.
 	{
-		int newEnd = start + (end - start) / 2;
-		recursiveSortingVector(container, start, newEnd); // Recursively sort left half
-		recursiveSortingVector(container, newEnd + 1, end); // Recursively sort right half
-		mergeSortedHalvesVector(container, start, newEnd, end); // Merge the sorted halves
-		insertPendVector(container, start, newEnd, end); // Insert pend elements
+		int midpoint = start + (end - start) / 2;
+		recursiveSortingVector(container, start, midpoint); // Recursively sort left half
+		recursiveSortingVector(container, midpoint + 1, end); // Recursively sort right half
+		mergeSortedHalvesVector(container, start, midpoint, end); // Merge the sorted halves
+		insertPendVector(container, start, midpoint, end); // Insert pend elements
 	}
 }
 
@@ -127,28 +126,25 @@ void PmergeMe::recursiveSortingVector(std::vector<int> &container, int start, in
 // Ford-Johnson algorithm for deque
 void PmergeMe::recursiveSortingDeque(std::deque<int> &container, int start, int end)
 {
-
 	if (start < end) // splitting until individual elements are reached. If clause happens if there is more than 1.
 	{
-		int newEnd = start + (end - start) / 2;
-		recursiveSortingDeque(container, start, newEnd); // Recursively sort left half
-		recursiveSortingDeque(container, newEnd + 1, end); // Recursively sort right half
-		mergeSortedHalvesDeque(container, start, newEnd, end); // Merge the sorted halves
-		insertPendDeque(container, start, newEnd, end); // Insert pend elements
+		int midpoint = start + (end - start) / 2;
+		recursiveSortingDeque(container, start, midpoint); // Recursively sort left half
+		recursiveSortingDeque(container, midpoint + 1, end); // Recursively sort right half
+		mergeSortedHalvesDeque(container, start, midpoint, end); // Merge the sorted halves
+		insertPendDeque(container, start, midpoint, end); // Insert pend elements
 	}
 }
 
 /*
 -> recursiveSortingDeque(): Recursion Depth:
-
 The recursion continues until individual elements are reached, splitting the deque into smaller halves:
 At depth 0: [5, 4, 3, 2, 1]
 At depth 1: [5, 4, 3] and [2, 1]
 At depth 2: [5, 4], [3], [2], [1]
 
 -> mergeSortedHalvesDeque(): Merge Sorted Halves:
-
-As the recursion unwinds, the function starts merging the sorted halves:
+When recursion has reached the end, mergeSortedHalvesDeque() starts merging the sorted halves:
 - Merge [5, 4] and [3] to get [3, 4, 5]:
   - Compare elements 5 and 3, place 3 first, then compare 5 and 4, place 4 next, and finally place 5.
 - Merge [2] and [1] to get [1, 2]:
@@ -171,12 +167,11 @@ At depth 0, merge [3, 4, 5] and [1, 2] to get the final sorted deque: [1, 2, 3, 
 6. Repeat steps 3-5 until all elements from both halves are merged into the final deque.
 */
 
-
 /*
 ** STEP 3
 */
 
-// Step 3: Merge sort - Vector
+// Step 3: Merge sort - [Vector]
 // Merge sort for vector
 void PmergeMe::mergeSortedHalvesVector(std::vector<int> &container, int start, int mid, int end)
 {
@@ -198,21 +193,26 @@ void PmergeMe::mergeSortedHalvesVector(std::vector<int> &container, int start, i
 	i = 0;
 	j = 0;
 	k = start;
+	// Merge the two sorted halves of the container into a single sorted sequence
 	while (i < (mid - start + 1) && j < (end - mid))
 	{
+		// Compare elements from the left/right halves and merge in container
 		if (left[i] <= right[j])
 		{
+			// If the element in the left half is smaller or equal, copy it to the container
 			container[k] = left[i];
-			k++;
-			i++;
+			k++; // Move to the next position in the container
+			i++; // Move to the next element in the left half
 		}
 		else
 		{
+			// If the element in the right half is smaller, copy it to the container
 			container[k] = right[j];
-			k++;
-			j++;
+			k++; // Move to the next position in the container
+			j++; // Move to the next element in the right half
 		}
 	}
+
 
 	while (i < (mid - start + 1))
 	{
@@ -228,7 +228,7 @@ void PmergeMe::mergeSortedHalvesVector(std::vector<int> &container, int start, i
 	}
 }
 
-// Step 3: Merge sort - Deque
+// Step 3: Merge sort - [Deque]
 // Merge sort for deque
 void PmergeMe::mergeSortedHalvesDeque(std::deque<int> &container, int start, int mid, int end)
 {
@@ -280,94 +280,7 @@ void PmergeMe::mergeSortedHalvesDeque(std::deque<int> &container, int start, int
 	}
 }
 
-// Step 3: Insert pend elements - Vector
-// Insert pend elements into the sorted main chain for vector
-void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid, int end)
-{
-    // Create a temporary vector to hold pend elements
-    std::vector<int> pendElements;
-
-    // Traverse the sorted main chain to find pend positions
-    size_t i = start;
-    size_t j = mid + 1;
-    while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
-    {
-        if (container[i] > container[j])
-        {
-            pendElements.push_back(container[j]);
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-
-    // Insert pend elements into the sorted main chain
-    size_t pendIndex = start;
-    int jacobsthalIndex = 1; // Initialize Jacobsthal number index
-    for (int pendElement : pendElements)
-    {
-        // Check if the current index is a power of 2 minus 1
-        if ((pendIndex & (pendIndex + 1)) == 0)
-        {
-            // Insert the pend element before the current index
-            container[pendIndex - 1] = pendElement;
-        }
-        else
-        {
-            // Insert the pend element at the current index
-            container[pendIndex] = pendElement;
-        }
-        pendIndex = pendIndex + jacobsthal(jacobsthalIndex++); // Update pendIndex based on Jacobsthal number sequence
-    }
-}
-
-// Step 3: Insert pend elements - Deque
-// Insert pend elements into the sorted main chain for deque
-void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, int end)
-{
-    // Create a temporary deque to hold pend elements
-    std::deque<int> pendElements;
-
-    // Traverse the sorted main chain to find pend positions
-    size_t i = start;
-    size_t j = mid + 1;
-    while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
-    {
-        if (container[i] > container[j])
-        {
-            pendElements.push_back(container[j]);
-            j++;
-        }
-        else
-        {
-            i++;
-        }
-    }
-
-    // Insert pend elements into the sorted main chain
-    size_t pendIndex = start;
-    int jacobsthalIndex = 1; // Initialize Jacobsthal number index
-    for (int pendElement : pendElements)
-    {
-        // Check if the current index is a power of 2 minus 1
-        if ((pendIndex & (pendIndex + 1)) == 0)
-        {
-            // Insert the pend element before the current index
-            container[pendIndex - 1] = pendElement;
-        }
-        else
-        {
-            // Insert the pend element at the current index
-            container[pendIndex] = pendElement;
-        }
-        pendIndex += jacobsthal(jacobsthalIndex++); // Update pendIndex based on Jacobsthal number sequence
-    }
-}
-
-
-// Step 3: Insert pend elements - Vector
+// Step 3: Insert pend elements - [Vector]
 // Insertion sort for vector
 void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
 {
@@ -393,7 +306,7 @@ void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
 	}
 }
 
-// Step 3: Insert pend elements - Deque
+// Step 3: Insert pend elements - [Deque]
 // Insertion sort for deque
 void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
 {
@@ -446,7 +359,115 @@ Compare 1 with 2
 [1, 2, 3, 4, 5]
 */
 
-// Step 3: Insert pend elements - Deque
+
+
+// Step 3: Insert pend elements - [Vector]
+// Insert pend elements into the sorted main chain for vector
+void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid, int end)
+{
+    // Create a temporary vector to hold pend elements
+    std::vector<int> pendElements;
+
+    // Traverse the sorted main chain to find pend positions
+    size_t i = start;
+    size_t j = mid + 1;
+    int jacobsthalIndex = 0; // Initialize Jacobsthal number index
+
+    while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
+    {
+        if (jacobsthalIndex == 0)
+        {
+            pendElements.push_back(container[i]);
+            i++;
+        }
+        else if (i == start + static_cast<size_t>(jacobsthal(jacobsthalIndex)) - 1)
+        {
+            pendElements.push_back(container[j]);
+            j++;
+            jacobsthalIndex++;
+        }
+        else
+        {
+            pendElements.push_back(container[i]);
+            i++;
+        }
+		printPendElementsVector(pendElements);
+    }
+
+    // Insert pend elements into the sorted main chain
+    size_t pendIndex = start;
+    for (int pendElement : pendElements)
+    {
+        container[pendIndex] = pendElement;
+        pendIndex++;
+    }
+}
+
+void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, int end)
+{
+    std::deque<int> pendElements;
+
+    size_t i = start;
+    size_t j = mid + 1;
+    int jacobsthalIndex = 0;
+
+    while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
+    {
+        if (jacobsthalIndex == 0)
+        {
+            pendElements.push_back(container[i]);
+            i++;
+        }
+		else if (i == start + static_cast<size_t>(jacobsthal(jacobsthalIndex)) - 1)
+        {
+            pendElements.push_back(container[j]);
+            j++;
+            jacobsthalIndex++;
+        }
+        else
+        {
+            pendElements.push_back(container[i]);
+            i++;
+        }
+    }
+
+    while (i <= static_cast<size_t>(mid))
+    {
+        pendElements.push_back(container[i]);
+        i++;
+    }
+
+    while (j <= static_cast<size_t>(end))
+    {
+        pendElements.push_back(container[j]);
+        j++;
+    }
+
+    size_t pendIndex = start;
+    for (int pendElement : pendElements)
+    {
+        container[pendIndex] = pendElement;
+        pendIndex++;
+    }
+}
+
+/*
+The "Pend Elements" lines represent the elements that are identified as pending during the sorting process. These elements are temporarily held aside until they can be inserted into the sorted main chain based on their positions determined by the Jacobsthal numbers.
+Let's analyze why the Pend Elements lines make sense in the order they are shown for the specific input "5 4 3 2 1 99 0":
+Pend Elements (Vector): 4: During the sorting process, the algorithm identifies that 4 needs to be placed at index 1 based on the Jacobsthal sequence.
+Pend Elements (Vector): 2: Similarly, 2 needs to be placed at index 1.
+Pend Elements (Vector): 2: Here, we have another 2, which is placed at index 1 again, indicating that there are multiple elements with the same value that need to be inserted at the same position in the sorted chain.
+Pend Elements (Vector): 2 3: Now, the algorithm identifies that 3 should be placed at index 2.
+Pend Elements (Vector): 1: The algorithm finds that 1 needs to be placed at index 1.
+Pend Elements (Vector): 0: 0 is identified to be placed at index 0.
+Pend Elements (Vector): 0 1: Here, both 0 and 1 are inserted at their respective positions.
+Pend Elements (Vector): 0: Another 0 is identified and placed at index 0.
+Pend Elements (Vector): 0 1: Again, 0 and 1 are inserted at their respective positions.
+Pend Elements (Vector): 0 1 2: The algorithm identifies that 2 should be placed at index 2.
+Pend Elements (Vector): 0 1 2 3: Finally, 3 is placed at index 3, completing the sorting process.
+Each line in the "Pend Elements" output corresponds to an iteration of identifying and inserting pending elements into the sorted main chain. The order of these lines reflects the positions where elements need to be inserted based on the Jacobsthal sequence, ensuring that the final sorted sequence is correct.
+*/
+
 // Compute the n-th Jacobsthal number
 int PmergeMe::jacobsthal(int n)
 {
@@ -457,7 +478,14 @@ int PmergeMe::jacobsthal(int n)
 	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
 }
 
+/*
+Definition Jacobsthal numbers
+Jacobsthal(0) = 0
+Jacobsthal(1) = 1
+Jacobsthal(n) = Jacobsthal(n - 1) + 2 * Jacobsthal(n - 2) for n >= 2
 
+Jacobsthal numbers help determine the positions for inserting these pending elements.
+*/
 
 // PRINTING
 void PmergeMe::printVector(const std::vector<int> &vectorContainer, bool isBefore)
@@ -497,3 +525,62 @@ void PmergeMe::printDeque(const std::deque<int> &dequeContainer, bool isBefore)
 	}
 	std::cout << std::endl;
 }
+
+// For debugging. Function to print the contents of the pendElements container for vector
+void PmergeMe::printPendElementsVector(const std::vector<int> &pendElements)
+{
+    std::cout << "Pend Elements (Vector): ";
+    for (int element : pendElements)
+    {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
+// For debugging Function to print the contents of the pendElements container for deque
+void PmergeMe::printPendElementsDeque(const std::deque<int> &pendElements)
+{
+    std::cout << "Pend Elements (Deque): ";
+    for (int element : pendElements)
+    {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
+/*
+Algorithm code implementation overview:
+Pairwise Sorting (Step 1):
+This step involves sorting adjacent pairs of elements within the container.
+If an element is greater than its adjacent element, 
+they are swapped to ensure that the sequence is sorted pairwise.
+
+Handling Odd Elements (Step 1):
+If the container has an odd number of elements,
+the last element is temporarily removed, and the remaining elements are sorted using the pairwise sorting algorithm.
+Once sorted, the last element is inserted back into the container.
+
+Recursive Sorting (Step 2):
+The container is recursively split into halves until individual elements are reached.
+For each recursive call, the left and right halves of the container are sorted independently.
+After sorting, the sorted halves are merged together.
+
+Merging Sorted Halves (Step 3):
+This step involves merging two sorted halves of the container into a single sorted sequence.
+The algorithm compares elements from the left and right halves and merges them into the final sorted sequence.
+
+Insert Pend Elements (Step 3):
+After merging the sorted halves, pending elements are inserted into the sorted main chain based on Jacobsthal numbers.
+Jacobsthal numbers determine the positions for inserting these pending elements into the sorted sequence.
+The algorithm iterates over the sorted main chain and inserts pending elements at the calculated positions.
+
+Jacobsthal Numbers:
+Jacobsthal numbers are computed recursively using the formula:
+Jacobsthal(n) = Jacobsthal(n - 1) + 2 * Jacobsthal(n - 2).
+These numbers are used to determine the positions for inserting pending elements during the merge sort process.
+The jacobsthal() function computes the n-th Jacobsthal number.
+
+Printing Functions:
+The provided code includes functions to print the contents of the vector and deque containers before and after sorting,
+as well as functions to print the pending elements for debugging purposes.
+*/
