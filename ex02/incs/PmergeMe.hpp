@@ -24,8 +24,6 @@ public:
     PmergeMe();
     ~PmergeMe();
 
-    void wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime);
-
     void pairwiseSortVector(std::vector<int> &container);
     void pairwiseSortDeque(std::deque<int> &container);
     void handleOddElements(std::vector<int> &container);
@@ -51,6 +49,11 @@ public:
     // For debugging
     void printPendElementsVector(const std::vector<int> &pendElements);
     void printPendElementsDeque(const std::deque<int> &pendElements);
+    bool verbose;
+
+
+    void printVectorContents(const std::vector<int> &container);
+    void printDequeContents(const std::deque<int> &container);
 };
 
 #endif

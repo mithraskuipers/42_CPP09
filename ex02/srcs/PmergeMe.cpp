@@ -21,38 +21,6 @@ PmergeMe::~PmergeMe()
 }
 
 /*
-** WRAPPER
-*/
-
-// Wrapper function to execute the sorting algorithms and measure time
-void PmergeMe::wrapper(std::vector<int> &Vcontainer, std::deque<int> &Dcontainer, uint &vecTime, uint &deqTime)
-{
-	PmergeMe merger; // Create an instance of the PmergeMe class
-
-	// VECTOR
-	std::clock_t start = std::clock();
-	if (Vcontainer.size() % 2 != 0)
-	{
-		merger.handleOddElements(Vcontainer);
-	}
-	recursiveSortingVector(Vcontainer, 0, Vcontainer.size() - 1);
-	std::clock_t end = std::clock();
-	double elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	vecTime = elapsed;
-
-	// DEQUE
-	start = std::clock();
-	if (Dcontainer.size() % 2 != 0)
-	{
-		merger.handleOddElements(Dcontainer);
-	}
-	recursiveSortingDeque(Dcontainer, 0, Dcontainer.size() - 1);
-	end = std::clock();
-	elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-	deqTime = elapsed;
-}
-
-/*
 ** STEP 1
 */
 
@@ -159,8 +127,8 @@ At depth 0, merge [3, 4, 5] and [1, 2] to get the final sorted deque: [1, 2, 3, 
 
 1. Initialize two pointers, one for each sorted half: leftPtr for [3, 4, 5] and rightPtr for [1, 2].
 2. Determine the insertion points using Jacobsthal numbers:
-    - For the first element from the pending deque, which is 1, we use the second Jacobsthal number, which is 1. This means we insert the first element at index 1 in the main chain.
-    - For the second element from the pending deque, which is 2, we use the third Jacobsthal number. In this case, the third Jacobsthal number is also 1, indicating that we again insert the second element at index 1 in the main chain.
+- For the first element from the pending deque, which is 1, we use the second Jacobsthal number, which is 1. This means we insert the first element at index 1 in the main chain.
+- For the second element from the pending deque, which is 2, we use the third Jacobsthal number. In this case, the third Jacobsthal number is also 1, indicating that we again insert the second element at index 1 in the main chain.
 3. Compare elements pointed to by leftPtr and rightPtr.
 4. If the element pointed to by leftPtr is smaller or equal to the element pointed to by rightPtr, copy the element from the left half to the final deque and move leftPtr to the next element.
 5. If the element pointed to by rightPtr is smaller, copy it to the final deque and move rightPtr to the next element.
@@ -310,6 +278,8 @@ void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
 // Insertion sort for deque
 void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
 {
+	std::cout << "TEST" << std::endl;
+
 	int n = end - start + 1; // Number of elements to sort
 
 	for (int i = 1; i < n; i++)
@@ -359,13 +329,14 @@ Compare 1 with 2
 [1, 2, 3, 4, 5]
 */
 
-
-
 // Step 3: Insert pend elements - [Vector]
 // Insert pend elements into the sorted main chain for vector
 void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid, int end)
 {
-    // Create a temporary vector to hold pend elements
+	if (this->verbose)
+		printVectorContents(container);
+    
+	// Create a temporary vector to hold pend elements
     std::vector<int> pendElements;
 
     // Traverse the sorted main chain to find pend positions
@@ -391,7 +362,8 @@ void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid,
             pendElements.push_back(container[i]);
             i++;
         }
-		printPendElementsVector(pendElements);
+		if (this->verbose)
+			printPendElementsVector(pendElements);
     }
 
     // Insert pend elements into the sorted main chain
@@ -405,6 +377,9 @@ void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid,
 
 void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, int end)
 {
+	if (this->verbose)
+		printDequeContents(container);
+
     std::deque<int> pendElements;
 
     size_t i = start;
@@ -429,6 +404,8 @@ void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, i
             pendElements.push_back(container[i]);
             i++;
         }
+		if (this->verbose)
+			printPendElementsDeque(pendElements);
     }
 
     while (i <= static_cast<size_t>(mid))
@@ -584,3 +561,23 @@ Printing Functions:
 The provided code includes functions to print the contents of the vector and deque containers before and after sorting,
 as well as functions to print the pending elements for debugging purposes.
 */
+
+// Function to print the contents of the deque container
+void PmergeMe::printDequeContents(const std::deque<int> &container) {
+
+    std::cout << "Deque Contents: ";
+    for (const auto &element : container) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+
+// Function to print the contents of the vector container
+void PmergeMe::printVectorContents(const std::vector<int> &container) {
+    std::cout << "Vector Contents: ";
+    for (const auto &element : container) {
+        std::cout << element << " ";
+    }
+    std::cout << std::endl;
+}
+

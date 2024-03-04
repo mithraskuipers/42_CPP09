@@ -49,10 +49,11 @@ int main(int argc, char **argv)
 		std::vector<int> vectorContainer;
 		std::deque<int> dequeContainer;
 		uint vectorSortingTime;
-		uint dequeSortingTime;
 		int currentNumber;
 		double elapsed;
 		PmergeMe merger;
+
+		merger.verbose = true; // For debugging
 
 		// Populate containers from command line arguments
 		for (int index = 1; index < argc; index++)
@@ -81,18 +82,20 @@ int main(int argc, char **argv)
 		elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
 		vectorSortingTime = elapsed;
 
+
 		// Calculate sorting time for deque
-		start = std::clock();
-		merger.recursiveSortingDeque(dequeContainer, 0, dequeContainer.size() - 1);
-		end = std::clock();
-		elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
-		dequeSortingTime = elapsed;
+		// uint dequeSortingTime;
+		// start = std::clock();
+		// merger.recursiveSortingDeque(dequeContainer, 0, dequeContainer.size() - 1);
+		// end = std::clock();
+		// elapsed = static_cast<double>(end - start) / (CLOCKS_PER_SEC / 1000000.0);
+		// dequeSortingTime = elapsed;
 
 		// Print sorted state and sorting times
 		merger.printVector(vectorContainer, false);
-		merger.printDeque(dequeContainer, false);
+		// merger.printDeque(dequeContainer, false);
 		std::cout << "Time to process a range of " << argc - 1 << " elements with std::vector : " << vectorSortingTime << " us" << std::endl;
-		std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque :  " << dequeSortingTime << " us" << std::endl;
+		// std::cout << "Time to process a range of " << argc - 1 << " elements with std::deque :  " << dequeSortingTime << " us" << std::endl;
 	}
 	catch (const char *errorMsg)
 	{
