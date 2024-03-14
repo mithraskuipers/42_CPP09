@@ -6,7 +6,7 @@
 /*   By: mikuiper <mikuiper@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2023/09/15 16:00:09 by mikuiper      #+#    #+#                 */
-/*   Updated: 2024/02/23 21:06:33 by mikuiper      ########   odam.nl         */
+/*   Updated: 2024/03/04 15:53:41 by mikuiper      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ The merging process ensures that within each pair of sorted halves, the elements
 At depth 0, merge [3, 4, 5] and [1, 2] to get the final sorted deque: [1, 2, 3, 4, 5].
 
 1. Initialize two pointers, one for each sorted half: leftPtr for [3, 4, 5] and rightPtr for [1, 2].
-2. Determine the insertion points using Jacobsthal numbers:
-- For the first element from the pending deque, which is 1, we use the second Jacobsthal number, which is 1. This means we insert the first element at index 1 in the main chain.
-- For the second element from the pending deque, which is 2, we use the third Jacobsthal number. In this case, the third Jacobsthal number is also 1, indicating that we again insert the second element at index 1 in the main chain.
+2. Determine the insertion points using _stack numbers:
+- For the first element from the pending deque, which is 1, we use the second _stack number, which is 1. This means we insert the first element at index 1 in the main chain.
+- For the second element from the pending deque, which is 2, we use the third _stack number. In this case, the third _stack number is also 1, indicating that we again insert the second element at index 1 in the main chain.
 3. Compare elements pointed to by leftPtr and rightPtr.
 4. If the element pointed to by leftPtr is smaller or equal to the element pointed to by rightPtr, copy the element from the left half to the final deque and move leftPtr to the next element.
 5. If the element pointed to by rightPtr is smaller, copy it to the final deque and move rightPtr to the next element.
@@ -259,10 +259,10 @@ void PmergeMe::insertSortVector(std::vector<int> &container, int start, int end)
 		int key = container[start + i];
 		int j = i - 1;
 
-		// Find position to insert based on Jacobsthal numbers
+		// Find position to insert based on _stack numbers
 		while (j >= 0 && container[start + j] > key)
 		{
-			if (j >= 0 && j == jacobsthal(i) - 2)
+			if (j >= 0 && j == _stack(i) - 2)
 			{
 				container[start + j + 1] = container[start + j];
 				j--;
@@ -287,10 +287,10 @@ void PmergeMe::insertSortDeque(std::deque<int> &container, int start, int end)
 		int key = container[start + i];
 		int j = i - 1;
 
-		// Find position to insert based on Jacobsthal numbers
+		// Find position to insert based on _stack numbers
 		while (j >= 0 && container[start + j] > key)
 		{
-			if (j >= 0 && j == jacobsthal(i) - 2)
+			if (j >= 0 && j == _stack(i) - 2)
 			{
 				container[start + j + 1] = container[start + j];
 				j--;
@@ -342,20 +342,20 @@ void PmergeMe::insertPendVector(std::vector<int> &container, int start, int mid,
     // Traverse the sorted main chain to find pend positions
     size_t i = start;
     size_t j = mid + 1;
-    int jacobsthalIndex = 0; // Initialize Jacobsthal number index
+    int _stackIndex = 0; // Initialize _stack number index
 
     while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
     {
-        if (jacobsthalIndex == 0)
+        if (_stackIndex == 0)
         {
             pendElements.push_back(container[i]);
             i++;
         }
-        else if (i == start + static_cast<size_t>(jacobsthal(jacobsthalIndex)) - 1)
+        else if (i == start + static_cast<size_t>(_stack(_stackIndex)) - 1)
         {
             pendElements.push_back(container[j]);
             j++;
-            jacobsthalIndex++;
+            _stackIndex++;
         }
         else
         {
@@ -384,20 +384,20 @@ void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, i
 
     size_t i = start;
     size_t j = mid + 1;
-    int jacobsthalIndex = 0;
+    int _stackIndex = 0;
 
     while (i <= static_cast<size_t>(mid) && j <= static_cast<size_t>(end))
     {
-        if (jacobsthalIndex == 0)
+        if (_stackIndex == 0)
         {
             pendElements.push_back(container[i]);
             i++;
         }
-		else if (i == start + static_cast<size_t>(jacobsthal(jacobsthalIndex)) - 1)
+		else if (i == start + static_cast<size_t>(_stack(_stackIndex)) - 1)
         {
             pendElements.push_back(container[j]);
             j++;
-            jacobsthalIndex++;
+            _stackIndex++;
         }
         else
         {
@@ -429,9 +429,9 @@ void PmergeMe::insertPendDeque(std::deque<int> &container, int start, int mid, i
 }
 
 /*
-The "Pend Elements" lines represent the elements that are identified as pending during the sorting process. These elements are temporarily held aside until they can be inserted into the sorted main chain based on their positions determined by the Jacobsthal numbers.
-Let's analyze why the Pend Elements lines make sense in the order they are shown for the specific input "5 4 3 2 1 99 0":
-Pend Elements (Vector): 4: During the sorting process, the algorithm identifies that 4 needs to be placed at index 1 based on the Jacobsthal sequence.
+The "Pend Elements" lines represent the elements that are identified as pending during the sorting process. These elements are temporarily held aside until they can be inserted into the sorted main chain based on their positions determined by the _stack numbers.
+Here an example for the specific input "5 4 3 2 1 99 0":
+Pend Elements (Vector): 4: During the sorting process, the algorithm identifies that 4 needs to be placed at index 1 based on the _stack sequence.
 Pend Elements (Vector): 2: Similarly, 2 needs to be placed at index 1.
 Pend Elements (Vector): 2: Here, we have another 2, which is placed at index 1 again, indicating that there are multiple elements with the same value that need to be inserted at the same position in the sorted chain.
 Pend Elements (Vector): 2 3: Now, the algorithm identifies that 3 should be placed at index 2.
@@ -442,26 +442,26 @@ Pend Elements (Vector): 0: Another 0 is identified and placed at index 0.
 Pend Elements (Vector): 0 1: Again, 0 and 1 are inserted at their respective positions.
 Pend Elements (Vector): 0 1 2: The algorithm identifies that 2 should be placed at index 2.
 Pend Elements (Vector): 0 1 2 3: Finally, 3 is placed at index 3, completing the sorting process.
-Each line in the "Pend Elements" output corresponds to an iteration of identifying and inserting pending elements into the sorted main chain. The order of these lines reflects the positions where elements need to be inserted based on the Jacobsthal sequence, ensuring that the final sorted sequence is correct.
+Each line in the "Pend Elements" output corresponds to an iteration of identifying and inserting pending elements into the sorted main chain. The order of these lines reflects the positions where elements need to be inserted based on the _stack sequence, ensuring that the final sorted sequence is correct.
 */
 
-// Compute the n-th Jacobsthal number
-int PmergeMe::jacobsthal(int n)
+// Compute the n-th _stack number
+int PmergeMe::_stack(int n)
 {
 	if (n == 0)
 		return 0;
 	if (n == 1)
 		return 1;
-	return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
+	return _stack(n - 1) + 2 * _stack(n - 2);
 }
 
 /*
-Definition Jacobsthal numbers
-Jacobsthal(0) = 0
-Jacobsthal(1) = 1
-Jacobsthal(n) = Jacobsthal(n - 1) + 2 * Jacobsthal(n - 2) for n >= 2
+Definition _stack numbers
+_stack(0) = 0
+_stack(1) = 1
+_stack(n) = _stack(n - 1) + 2 * _stack(n - 2) for n >= 2
 
-Jacobsthal numbers help determine the positions for inserting these pending elements.
+_stack numbers help determine the positions for inserting these pending elements.
 */
 
 // PRINTING
@@ -547,15 +547,15 @@ This step involves merging two sorted halves of the container into a single sort
 The algorithm compares elements from the left and right halves and merges them into the final sorted sequence.
 
 Insert Pend Elements (Step 3):
-After merging the sorted halves, pending elements are inserted into the sorted main chain based on Jacobsthal numbers.
-Jacobsthal numbers determine the positions for inserting these pending elements into the sorted sequence.
+After merging the sorted halves, pending elements are inserted into the sorted main chain based on _stack numbers.
+_stack numbers determine the positions for inserting these pending elements into the sorted sequence.
 The algorithm iterates over the sorted main chain and inserts pending elements at the calculated positions.
 
-Jacobsthal Numbers:
-Jacobsthal numbers are computed recursively using the formula:
-Jacobsthal(n) = Jacobsthal(n - 1) + 2 * Jacobsthal(n - 2).
+_stack Numbers:
+_stack numbers are computed recursively using the formula:
+_stack(n) = _stack(n - 1) + 2 * _stack(n - 2).
 These numbers are used to determine the positions for inserting pending elements during the merge sort process.
-The jacobsthal() function computes the n-th Jacobsthal number.
+The _stack() function computes the n-th _stack number.
 
 Printing Functions:
 The provided code includes functions to print the contents of the vector and deque containers before and after sorting,
